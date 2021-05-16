@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: content-box;
+}
+:root {
+
+    --white: #FFF;
+    --black: #000000;
+
+    --brownTop: #DE4929;
+    --brownDown: #BF7245;
+    --brownButton: #592727;
+
+}
+
+@media(max-width: 1080px){
+    html{
+        font-size: 93.75%;// 15px
+    }
+}
+
+@media(max-width: 720px){
+    html{
+        font-size: 87.5%;// 14px
+    }
+}
+
+html, body, #root {
+    min-height: 100%;
+}
+
+html{
+    background-image: url("assets/back.jpg");
+    background-size: contain;
+    background-position: center;
+}
+
+body,input,textarea, button{
+    font: 500 1rem Arial;
+    color: var(--black);
+}
+
+body {
+
+    img{
+        height: 5rem;
+        align-self: center;
+        justify-self: center;
+    }
+}
+
+h1{
+    font-size: 2rem;
+}
+
+h2{
+    font-size: 1.5rem;
+}
+
+button{
+    cursor: pointer;
+}
