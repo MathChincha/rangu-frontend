@@ -1,5 +1,9 @@
 import axios from 'axios'
 
-const api = axios.create({
-    baseURL: ''
+const apiUsers = axios.create({
+    baseURL: 'https://rangu-users.herokuapp.com/api/rangu/v1'
 })
+
+export {
+    apiUsers
+};
