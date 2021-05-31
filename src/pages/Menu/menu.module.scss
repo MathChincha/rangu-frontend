@@ -1,3 +1,31 @@
 .menuContainer{
     background-image: linear-gradient(180deg, rgba(222, 73, 41, 0.9), rgba(191, 114, 69, 0.9));
+    height: 100%;
+    width: 80rem;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 1rem;
+
+    align-items: center;
+    justify-items: center;
+
+    ul.food-list{
+        display: flex;
+        flex-direction: column;
+    }
+
+    button{
+        opacity: 1;
+    }
+    img {
+        height: 15rem;
+        width: 15rem;
+    }
 }
