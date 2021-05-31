@@ -35,7 +35,8 @@ export default function SignUp({ history }) {
                     phone,
                     restaurantName
                 });
-            history.push('/')
+            alert("Sua solicitação de criação de conta foi enviada, aguarde o e-mail de ativação de conta");
+            history.push('/');
         } catch (err) {
             alert("Alerta");
         }
