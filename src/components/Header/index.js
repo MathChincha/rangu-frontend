@@ -11,20 +11,20 @@ export default function Header(props) {
     });
     const isActive = useState(props.isActive);
 
-    function showUser() {
-
-        if (isActive)
-            return (
-                <>
-
-                </>
-            )
-        else
-            return (
-                <> <label>teste</label> </>
-            )
-    }
-
+    /*   function showUser() {
+   
+           if (isActive)
+               return (
+                   <>
+   
+                   </>
+               )
+           else
+               return (
+                   <> <label>teste</label> </>
+               )
+       }
+   */
     return (
         <header className={styles.headerContainer}>
 
@@ -37,7 +37,7 @@ export default function Header(props) {
                         <span className={styles.Header} onClick={() => { props.menu() }}>Menu</span>
                         <span className={styles.Header} onClick={() => { props.profile() }}>Profile</span>
                         <span className={styles.Header} onClick={() => { props.orders() }}>Orders</span>
-                        <span className={styles.Header} onClick={() => { props.sair() }}>Sair</span>
+                        <span className={styles.Header} onClick={() => { props.logoff() }}>Logoff</span>
                     </div> : null
                 }
             </div>

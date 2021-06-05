@@ -11,7 +11,6 @@ export default function SignUp({ history }) {
     const [cnpj, setCnpj] = useState('');
     const [phone, setPhone] = useState('');
     const [restaurantName, setRestaurantName] = useState('');
-    const [address, setAddress] = useState([]);
     const [postalCode, setPostalCode] = useState('');
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
@@ -24,33 +23,32 @@ export default function SignUp({ history }) {
         event.preventDefault();
 
         try {
-            Address();
+            console.log("teste");
             await apiUsers.post('/restaurants/sign-up',
                 {
-                    address,
+                    restaurantName,
                     cnpj,
-                    email,
-                    name,
-                    password,
-                    phone,
-                    restaurantName
+                    user: {
+                        name,
+                        email,
+                        password,
+                        phone
+                    },
+                    address: {
+                        district,
+                        city,
+                        state,
+                        postalCode,
+                        number,
+                        street
+                    }
                 });
+            console.log('deu certo');
             alert("Sua solicitação de criação de conta foi enviada, aguarde o e-mail de ativação de conta");
-            history.push('/');
+            history.push('/menu');
         } catch (err) {
             alert("Alerta");
         }
-    }
-
-    function Address() {
-        setAddress([
-            postalCode,
-            state,
-            city,
-            district,
-            street,
-            number
-        ])
     }
 
     function Login() {
@@ -60,34 +58,34 @@ export default function SignUp({ history }) {
     return (
         <>
             <div className={styles.signUpContainer}>
-                <div class={styles.collumn}>
+                <div className={styles.collumn}>
                     <img src={logo} alt="Logo" />
-                    <div class={styles.row}>
+                    <div className={styles.row}>
                         <p>Identity</p>
                         <p>Address</p>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <div class={styles.row}>
+                        <div className={styles.row}>
                             <input placeholder="CNPJ" name="CNPJ" id="CNPJ" value={cnpj} onChange={event => setCnpj(event.target.value)} />
                             <input placeholder="PostalCode" name="postalCode" id="postalCode" value={postalCode} onChange={event => setPostalCode(event.target.value)} />
                         </div>
-                        <div class={styles.row}>
+                        <div className={styles.row}>
                             <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
                             <input placeholder="State" name="state" id="state" value={state} onChange={event => setState(event.target.value)} />
                         </div>
-                        <div class={styles.row}>
+                        <div className={styles.row}>
                             <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
                             <input placeholder="City" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
                         </div>
-                        <div class={styles.row}>
+                        <div className={styles.row}>
                             <input placeholder="Password" name="password" id="password" value={password} onChange={event => setPassword(event.target.value)} />
                             <input placeholder="District" name="district" id="district" value={district} onChange={event => setDistrict(event.target.value)} />
                         </div>
-                        <div class={styles.row}>
+                        <div className={styles.row}>
                             <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
                             <input placeholder="Street" name="street" id="street" value={street} onChange={event => setStreet(event.target.value)} />
                         </div>
-                        <div class={styles.row}>
+                        <div className={styles.row}>
                             <input placeholder="RestaurantName" name="restaurantName" id="restaurantName" value={restaurantName} onChange={event => setRestaurantName(event.target.value)} />
                             <input placeholder="Number" name="number" id="number" value={number} onChange={event => setNumber(event.target.value)} />
                         </div>
