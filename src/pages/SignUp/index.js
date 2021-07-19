@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import styles from './signup.module.scss'
-import logo from '../../assets/logo.png'
+import Popup from '../../components/Popup/Popup'
 import { apiUsers } from '../../services/api'
+
+import logo from '../../assets/logo.png'
+import Loading from '../../assets/Loading.gif'
 
 export default function SignUp({ history }) {
 
@@ -17,10 +20,12 @@ export default function SignUp({ history }) {
     const [district, setDistrict] = useState('');
     const [street, setStreet] = useState('');
     const [number, setNumber] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
 
     async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
 
         try {
             console.log("teste");
@@ -44,10 +49,12 @@ export default function SignUp({ history }) {
                     }
                 });
             console.log('deu certo');
+            setIsLoading(false);
             alert("Sua solicitação de criação de conta foi enviada, aguarde o e-mail de ativação de conta");
-            history.push('/menu');
+            history.push('/');
         } catch (err) {
-            alert("Alerta");
+            setIsLoading(false);
+            alert("Usuário já existe");
         }
     }
 
@@ -57,6 +64,13 @@ export default function SignUp({ history }) {
 
     return (
         <>
+            {
+                isLoading && <Popup
+                    content={<>
+                        <img src={Loading} alt="Loading"></img>
+                    </>}
+                />
+            }
             <div className={styles.signUpContainer}>
                 <div className={styles.collumn}>
                     <img src={logo} alt="Logo" />
@@ -78,7 +92,7 @@ export default function SignUp({ history }) {
                             <input placeholder="City" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
                         </div>
                         <div className={styles.row}>
-                            <input placeholder="Password" name="password" id="password" value={password} onChange={event => setPassword(event.target.value)} />
+                            <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
                             <input placeholder="District" name="district" id="district" value={district} onChange={event => setDistrict(event.target.value)} />
                         </div>
                         <div className={styles.row}>

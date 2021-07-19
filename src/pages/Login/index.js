@@ -1,15 +1,20 @@
 import React, { useState } from 'react'
 import styles from './login.module.scss'
-import logo from '../../assets/logo.png'
 import { apiUsers } from '../../services/api'
+import Popup from '../../components/Popup/Popup'
+
+import logo from '../../assets/logo.png'
+import Loading from '../../assets/Loading.gif'
 
 export default function Login({ history }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const type = 'RESTAURANT';
+    const [isLoading, setIsLoading] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
         console.log(email);
         console.log(password);
         console.log(type);
@@ -21,10 +26,11 @@ export default function Login({ history }) {
                     password,
                     type
                 });
-
-            history.push('/menu')
+            setIsLoading(false);
+            history.push('/menu');
         } catch (err) {
             alert("Alerta");
+            setIsLoading(false);
         }
     }
 
@@ -38,6 +44,13 @@ export default function Login({ history }) {
 
     return (
         <>
+            {
+                isLoading && <Popup
+                    content={<>
+                        <img src={Loading} alt="Loading"></img>
+                    </>}
+                />
+            }
             <div className={styles.loginContainer}>
                 <img src={logo} alt="Logo" />
                 <p>Sign In</p>

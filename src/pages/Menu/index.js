@@ -6,6 +6,9 @@ import Popup from '../../components/Popup/Popup'
 import BigMac from '../../assets/BigMac.jpg'
 import McChicken from '../../assets/McChicken.png'
 import CocaCola from '../../assets/CocaCola.jpg'
+import Heineken from '../../assets/Heineken.jpg'
+import Pudim from '../../assets/Pudim.jpg'
+import TortaLimao from '../../assets/TortaLimao.jpg'
 
 export default function Menu({ history }) {
     const [isOpenType, setIsOpenType] = useState(false);
@@ -31,10 +34,6 @@ export default function Menu({ history }) {
             id: 3,
             type: 'Dessert'
         },
-        {
-            id: 4,
-            type: 'Porções'
-        }
     ]
 
     const foods = [
@@ -64,6 +63,33 @@ export default function Menu({ history }) {
             eta: '2 min',
             price: 'R$ 5.00',
             description: 'A cold Brew',
+        },
+        {
+            id: 8,
+            type: 'Drinks',
+            foodImg: Heineken,
+            dishName: 'Heineken',
+            eta: '2 min',
+            price: 'R$ 6.00',
+            description: 'A cold Brew',
+        },
+        {
+            id: 9,
+            type: 'Dessert',
+            foodImg: Pudim,
+            dishName: 'Pudim',
+            eta: '5 min',
+            price: 'R$ 10.00',
+            description: 'A delicious Pudim, made in the house',
+        },
+        {
+            id: 10,
+            type: 'Dessert',
+            foodImg: TortaLimao,
+            dishName: 'Lemon Pie',
+            eta: '5 min',
+            price: 'R$ 10.00',
+            description: 'A delicious Lemon Pie, made in the house',
         },
     ]
 
