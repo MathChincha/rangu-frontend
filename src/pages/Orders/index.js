@@ -1,14 +1,7 @@
 import React, { useState } from 'react'
-import styles from './menu.module.scss'
+import styles from './orders.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
-
-import BigMac from '../../assets/BigMac.jpg'
-import McChicken from '../../assets/McChicken.png'
-import CocaCola from '../../assets/CocaCola.jpg'
-import Heineken from '../../assets/Heineken.jpg'
-import Pudim from '../../assets/Pudim.jpg'
-import TortaLimao from '../../assets/TortaLimao.jpg'
 
 export default function Menu({ history }) {
     const [isOpenType, setIsOpenType] = useState(false);
@@ -21,26 +14,25 @@ export default function Menu({ history }) {
 
 
 
-    const types = [
+    const tables = [
         {
             id: 1,
-            type: 'Hamburguers'
+            table: 'Table 1'
         },
         {
             id: 2,
-            type: 'Drinks'
+            table: 'Table 2'
         },
         {
             id: 3,
-            type: 'Dessert'
+            table: 'Table 3'
         },
     ]
 
     const foods = [
         {
             id: 5,
-            type: 'Hamburguers',
-            foodImg: BigMac,
+            table: 'Table 1',
             dishName: 'Big Mac',
             eta: '5 min',
             price: 'R$ 35.99',
@@ -48,8 +40,7 @@ export default function Menu({ history }) {
         },
         {
             id: 6,
-            type: 'Hamburguers',
-            foodImg: McChicken,
+            table: 'Table 1',
             dishName: 'McChicken',
             eta: '2 min',
             price: 'R$ 10.90',
@@ -57,8 +48,7 @@ export default function Menu({ history }) {
         },
         {
             id: 7,
-            type: 'Drinks',
-            foodImg: CocaCola,
+            table: 'Table 1',
             dishName: 'Coca-Cola',
             eta: '2 min',
             price: 'R$ 5.00',
@@ -66,8 +56,7 @@ export default function Menu({ history }) {
         },
         {
             id: 8,
-            type: 'Drinks',
-            foodImg: Heineken,
+            table: 'Table 2',
             dishName: 'Heineken',
             eta: '2 min',
             price: 'R$ 6.00',
@@ -75,8 +64,7 @@ export default function Menu({ history }) {
         },
         {
             id: 9,
-            type: 'Dessert',
-            foodImg: Pudim,
+            table: 'Table 2',
             dishName: 'Pudim',
             eta: '5 min',
             price: 'R$ 10.00',
@@ -84,8 +72,7 @@ export default function Menu({ history }) {
         },
         {
             id: 10,
-            type: 'Dessert',
-            foodImg: TortaLimao,
+            table: 'Table 3',
             dishName: 'Lemon Pie',
             eta: '5 min',
             price: 'R$ 10.00',
@@ -136,23 +123,20 @@ export default function Menu({ history }) {
             }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} />
             <div className={styles.menuContainer}>
-                <button className={styles.newCategory} onClick={() => { togglePopupType() }}>Create New Category</button>
+                <button className={styles.newCategory} onClick={() => { togglePopupType() }}>Create New Table</button>
                 <div>
-                    {types.map((type) => (
+                    {tables.map((tables) => (
                         <>
-                            <h1 className={styles.title} key={type.id}>{type.type}</h1>
-                            <ul className={styles.foodList} key={type.id}>
-                                <button className={styles.ul}>Disable Category</button>
-                                <button className={styles.ul}>Add Item</button>
-                                {foods.filter(food => food.type === type.type).map((food) => (
+                            <h1 className={styles.title} key={tables.id}>{tables.table}</h1>
+                            <ul className={styles.foodList} key={tables.id}>
+                                <button className={styles.ul}>Remove Person</button>
+                                <button className={styles.ul}>Checkout</button>
+                                {foods.filter(food => food.table === tables.table).map((food) => (
                                     <li className={styles.foodList} key={food.id}>
-                                        <img className={styles.dishImg} src={food.foodImg} alt="Food" />
                                         <strong className={styles.dishName}>{food.dishName}</strong>
-                                        <strong className={styles.description}>Description: {food.description}</strong>
                                         <strong className={styles.price}>Price: <strong className={styles.color}>{food.price}</strong></strong>
                                         <strong className={styles.eta}>Time to Prepare: <strong className={styles.color}>{food.eta}</strong></strong>
-                                        <button className={styles.li1}>Disable Item</button>
-                                        <button className={styles.li2}>Edit Item</button>
+                                        <button className={styles.li2}>Edit Status</button>
                                     </li>
                                 ))}
                             </ul>

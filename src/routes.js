@@ -5,6 +5,9 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Menu from './pages/Menu';
+import Orders from './pages/Orders';
+import Profile from './pages/Profile';
+import Employess from './pages/Employess';
 
 
 export default function Routes() {
@@ -14,6 +17,9 @@ export default function Routes() {
             <Route path="/signup" exact component={SignUp} />
             <Route path="/forgotpassword" exact component={ForgotPassword} />
             <Route path="/menu" exact component={Menu} />
+            <Route path="/orders" exact component={Orders} />
+            <Route path="/profile" exact component={Profile} />
+            <Route path="/employess" exact component={Employess} />
         </Switch>
     </BrowserRouter>
     );

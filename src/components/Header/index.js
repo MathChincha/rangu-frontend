@@ -37,6 +37,7 @@ export default function Header(props) {
                         <span className={styles.Header} onClick={() => { props.menu() }}>Menu</span>
                         <span className={styles.Header} onClick={() => { props.profile() }}>Profile</span>
                         <span className={styles.Header} onClick={() => { props.orders() }}>Orders</span>
+                        <span className={styles.Header} onClick={() => { props.employess() }}>Employess</span>
                         <span className={styles.Header} onClick={() => { props.logoff() }}>Logoff</span>
                     </div> : null
                 }
