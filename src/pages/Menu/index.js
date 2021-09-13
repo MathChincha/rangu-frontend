@@ -19,8 +19,6 @@ export default function Menu({ history }) {
         setIsOpenType(!isOpenType);
     }
 
-
-
     const types = [
         {
             id: 1,
@@ -118,6 +116,12 @@ export default function Menu({ history }) {
     function employess() {
         history.push('/employess');
     }
+    function tables() {
+        history.push('/tables');
+    }
+    function reports() {
+        history.push('/reports');
+    }
 
     return (
         <>
@@ -134,7 +138,7 @@ export default function Menu({ history }) {
                     handleClose={togglePopupType}
                 />
             }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} />
+            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
                 <button className={styles.newCategory} onClick={() => { togglePopupType() }}>Create New Category</button>
                 <div>

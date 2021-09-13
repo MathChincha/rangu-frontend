@@ -20,12 +20,15 @@ export default function Login({ history }) {
         console.log(type);
 
         try {
-            await apiUsers.post('/login',
+            const response = await apiUsers.post('/login',
                 {
                     email,
                     password,
                     type
                 });
+            console.log(response);
+            sessionStorage.setItem('token', response.data.token);
+            console.log(sessionStorage.getItem('token'));
             setIsLoading(false);
             history.push('/menu');
         } catch (err) {

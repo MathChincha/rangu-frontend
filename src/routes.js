@@ -8,6 +8,8 @@ import Menu from './pages/Menu';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
 import Employess from './pages/Employess';
+import Reports from './pages/Reports';
+import Tables from './pages/Tables';
 
 
 export default function Routes() {
@@ -20,6 +22,8 @@ export default function Routes() {
             <Route path="/orders" exact component={Orders} />
             <Route path="/profile" exact component={Profile} />
             <Route path="/employess" exact component={Employess} />
+            <Route path="/tables" exact component={Tables} />
+            <Route path="/reports" exact component={Reports} />
         </Switch>
     </BrowserRouter>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './profile.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
@@ -7,7 +7,7 @@ import { apiUsers } from '../../services/api'
 import logo from '../../assets/logo.png'
 import Loading from '../../assets/Loading.gif'
 
-export default function Menu({ history }) {
+export default function Profile({ history }) {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -23,38 +23,67 @@ export default function Menu({ history }) {
     const [number, setNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        async function loadData() {
+            const user_token = sessionStorage.getItem('token');
+            console.log(user_token);
+            try {
+                const response = await apiUsers.get('/restaurants/by-token', {
+                    headers: { Authorization: user_token }
+                });
+                console.log(response.data);
+                setCnpj(response.data.cnpj);
+                setEmail(response.data.user.email);
+                setName(response.data.user.name);
+                setPhone(response.data.user.phone);
+                setRestaurantName(response.data.restaurantName);
+                setPostalCode(response.data.address.postalCode);
+                setState(response.data.address.state);
+                setCity(response.data.address.city);
+                setDistrict(response.data.address.district);
+                setStreet(response.data.address.street);
+                setNumber(response.data.address.number);
+            } catch (err) {
+                alert("Alerta");
+            }
+        }
+        loadData();
+        console.log('teste');
+    }, []);
+
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
 
         try {
             console.log("teste");
-            await apiUsers.update('/restaurants/sign-up',
+            const user_token = sessionStorage.getItem('token');
+            await apiUsers.put('/restaurants',
                 {
-                    restaurantName,
-                    cnpj,
-                    user: {
-                        name,
-                        email,
-                        password,
-                        phone
+                    headers: { Authorization: user_token },
+                    body: {
+                        addressUpdate: {
+                            city,
+                            district,
+                            number,
+                            postalCode,
+                            state,
+                            street
+                        },
+                        cnpj,
+                        userUpdate: {
+                            name,
+                            phone
+                        }
                     },
-                    address: {
-                        district,
-                        city,
-                        state,
-                        postalCode,
-                        number,
-                        street
-                    }
                 });
             console.log('deu certo');
             setIsLoading(false);
-            alert("Sua solicitação de criação de conta foi enviada, aguarde o e-mail de ativação de conta");
+            alert("Seus dados foram atualizados com sucesso");
             history.push('/');
         } catch (err) {
             setIsLoading(false);
-            alert("Usuário já existe");
+            alert("Erro");
         }
     }
 
@@ -73,6 +102,12 @@ export default function Menu({ history }) {
     function employess() {
         history.push('/employess');
     }
+    function tables() {
+        history.push('/tables');
+    }
+    function reports() {
+        history.push('/reports');
+    }
 
     return (
         <>
@@ -83,7 +118,7 @@ export default function Menu({ history }) {
                     </>}
                 />
             }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} />
+            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
                 <div className={styles.collumn}>
                     <img src={logo} alt="Logo" />

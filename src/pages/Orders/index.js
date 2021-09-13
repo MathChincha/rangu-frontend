@@ -3,80 +3,88 @@ import styles from './orders.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
 
-export default function Menu({ history }) {
+export default function Orders({ history }) {
     const [isOpenType, setIsOpenType] = useState(false);
-
-
 
     function togglePopupType() {
         setIsOpenType(!isOpenType);
     }
 
-
-
-    const tables = [
+    const table = [
         {
-            id: 1,
+            id: 11,
             table: 'Table 1'
         },
         {
-            id: 2,
+            id: 12,
             table: 'Table 2'
         },
         {
-            id: 3,
+            id: 13,
             table: 'Table 3'
         },
     ]
 
     const foods = [
         {
-            id: 5,
+            id: 15,
             table: 'Table 1',
+            clientName: 'Matheus',
             dishName: 'Big Mac',
             eta: '5 min',
             price: 'R$ 35.99',
-            description: "There is nothing like it. Two hamburgers, lettuce, cheese and special sauce, onion and pickles on a sesame bun. The flavor of McDonald's is triply delicious. With three 100% beef burgers, melted cheese, onion, pickles, ketchup and mustard. There is nothing like it. Two hamburgers, lettuce, cheese and special sauce, onion and pickles on a sesame bun.",
+            comments: "Sem cebola, teste teste vai curinthia teste teste",
+            status: 'Em preparo'
         },
         {
-            id: 6,
+            id: 16,
             table: 'Table 1',
+            clientName: 'Gian',
             dishName: 'McChicken',
             eta: '2 min',
             price: 'R$ 10.90',
-            description: 'The flavor you love. Breaded and browned chicken with a smooth, creamy sauce, accompanied by crispy lettuce on a sesame bun.',
+            comments: "Sem cebola",
+            status: 'Em preparo'
         },
         {
-            id: 7,
+            id: 17,
             table: 'Table 1',
+            clientName: 'Gian',
             dishName: 'Coca-Cola',
             eta: '2 min',
             price: 'R$ 5.00',
-            description: 'A cold Brew',
+            comments: 'bem gelada, copo gelo e limão',
+            status: 'Concluído'
         },
         {
-            id: 8,
+            id: 18,
             table: 'Table 2',
+            clientName: 'Matheus',
             dishName: 'Heineken',
             eta: '2 min',
             price: 'R$ 6.00',
-            description: 'A cold Brew',
+            comments: 'trincando',
+            status: 'Concluído'
         },
         {
-            id: 9,
+            id: 19,
             table: 'Table 2',
+            clientName: 'Leonarno',
             dishName: 'Pudim',
             eta: '5 min',
             price: 'R$ 10.00',
-            description: 'A delicious Pudim, made in the house',
+            comments: '2 garfos por favor',
+            status: 'Pronto'
         },
         {
-            id: 10,
+            id: 20,
             table: 'Table 3',
+            clientName: 'Luiz',
             dishName: 'Lemon Pie',
             eta: '5 min',
             price: 'R$ 10.00',
-            description: 'A delicious Lemon Pie, made in the house',
+            comments: 'Pronto',
+            status: 'Concluído'
         },
     ]
 
@@ -105,45 +113,37 @@ export default function Menu({ history }) {
     function employess() {
         history.push('/employess');
     }
+    function tables() {
+        history.push('/tables');
+    }
+    function reports() {
+        history.push('/reports');
+    }
 
     return (
         <>
-            {
-                isOpenType && <Popup
-                    content={<>
-                        <b>Insert the new category</b>
-                        <input></input>
-                        <div>
-                            <button className={styles.insert} onClick={() => { togglePopupType() }}>Insert New Category</button>
-                            <button className={styles.insert} onClick={() => { togglePopupType() }}>Cancel</button>
-                        </div>
-                    </>}
-                    handleClose={togglePopupType}
-                />
-            }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} />
+            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
-                <button className={styles.newCategory} onClick={() => { togglePopupType() }}>Create New Table</button>
-                <div>
-                    {tables.map((tables) => (
-                        <>
-                            <h1 className={styles.title} key={tables.id}>{tables.table}</h1>
-                            <ul className={styles.foodList} key={tables.id}>
-                                <button className={styles.ul}>Remove Person</button>
-                                <button className={styles.ul}>Checkout</button>
-                                {foods.filter(food => food.table === tables.table).map((food) => (
-                                    <li className={styles.foodList} key={food.id}>
-                                        <strong className={styles.dishName}>{food.dishName}</strong>
-                                        <strong className={styles.price}>Price: <strong className={styles.color}>{food.price}</strong></strong>
-                                        <strong className={styles.eta}>Time to Prepare: <strong className={styles.color}>{food.eta}</strong></strong>
-                                        <button className={styles.li2}>Edit Status</button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
-                    ))}
-                </div>
-
+                {table.map((table) => (
+                    <>
+                        <h1 className={styles.title} key={table.id}>{table.table}</h1>
+                        <ul className={styles.foodList} key={table.id}>
+                            <button className={styles.ul}>Remove Person</button>
+                            <button className={styles.ul}>Checkout</button>
+                            {foods.filter(food => food.table === table.table).map((food) => (
+                                <li className={styles.foodList} key={food.id}>
+                                    <strong className={styles.dishName}>{food.dishName}</strong>
+                                    <strong className={styles.price}>Price: <strong className={styles.color}>{food.price}</strong></strong>
+                                    <strong className={styles.eta}>Time to Prepare: <strong className={styles.color}>{food.eta}</strong></strong>
+                                    <strong className={styles.comments}>Comments: <strong className={styles.color}>{food.comments}</strong></strong>
+                                    <strong className={styles.clientName}>Client Name: <strong className={styles.color}>{food.clientName}</strong></strong>
+                                    <strong className={styles.status}>Status: <strong className={styles.color}>{food.status}</strong></strong>
+                                    <button className={styles.li2}>Edit Status</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                ))}
             </div>
         </>
     );
