@@ -4,10 +4,20 @@ import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
 
 export default function Orders({ history }) {
-    const [isOpenType, setIsOpenType] = useState(false);
+    const [isOpenEditStatus, setIsOpenEditStatus] = useState(false);
+    const [isOpenCheckout, setIsOpenCheckout] = useState(false);
+    const [isOpenRemovePerson, setIsOpenRemovePerson] = useState(false);
 
-    function togglePopupType() {
-        setIsOpenType(!isOpenType);
+    function togglePopupEditStatus() {
+        setIsOpenEditStatus(!isOpenEditStatus);
+    }
+
+    function togglePopupCheckout() {
+        setIsOpenCheckout(!isOpenCheckout);
+    }
+
+    function togglePopupRemovePerson() {
+        setIsOpenRemovePerson(!isOpenRemovePerson);
     }
 
     const table = [
@@ -122,14 +132,55 @@ export default function Orders({ history }) {
 
     return (
         <>
+            {
+                isOpenCheckout && <Popup
+                    content={<>
+                        <b>Checkout</b>
+                        <strong>Total Value:</strong>
+                        <strong>Itens to checkout:</strong>
+                        <strong>Payment per Person:</strong>
+                        <div>
+                            <button className={styles.insert} onClick={() => { togglePopupCheckout() }}>Checkout</button>
+                            <button className={styles.insert} onClick={() => { togglePopupCheckout() }}>Cancel</button>
+                        </div>
+                    </>}
+                    handleClose={togglePopupCheckout}
+                />
+            }
+            {
+                isOpenRemovePerson && <Popup
+                    content={<>
+                        <b>You want to remove this person?</b>
+                        <strong>Person to remove:</strong>
+                        <div>
+                            <button className={styles.insert} onClick={() => { togglePopupRemovePerson() }}>Remove Person</button>
+                            <button className={styles.insert} onClick={() => { togglePopupRemovePerson() }}>Cancel</button>
+                        </div>
+                    </>}
+                    handleClose={togglePopupRemovePerson}
+                />
+            }
+            {
+                isOpenEditStatus && <Popup
+                    content={<>
+                        <b>Edit the Status</b>
+                        <input></input>
+                        <div>
+                            <button className={styles.insert} onClick={() => { togglePopupEditStatus() }}>Edit Status</button>
+                            <button className={styles.insert} onClick={() => { togglePopupEditStatus() }}>Cancel</button>
+                        </div>
+                    </>}
+                    handleClose={togglePopupEditStatus}
+                />
+            }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
                 {table.map((table) => (
                     <>
                         <h1 className={styles.title} key={table.id}>{table.table}</h1>
                         <ul className={styles.foodList} key={table.id}>
-                            <button className={styles.ul}>Remove Person</button>
-                            <button className={styles.ul}>Checkout</button>
+                            <button className={styles.ul} onClick={() => { togglePopupRemovePerson() }}>Remove Person</button>
+                            <button className={styles.ul} onClick={() => { togglePopupCheckout() }}>Checkout</button>
                             {foods.filter(food => food.table === table.table).map((food) => (
                                 <li className={styles.foodList} key={food.id}>
                                     <strong className={styles.dishName}>{food.dishName}</strong>
@@ -138,7 +189,7 @@ export default function Orders({ history }) {
                                     <strong className={styles.comments}>Comments: <strong className={styles.color}>{food.comments}</strong></strong>
                                     <strong className={styles.clientName}>Client Name: <strong className={styles.color}>{food.clientName}</strong></strong>
                                     <strong className={styles.status}>Status: <strong className={styles.color}>{food.status}</strong></strong>
-                                    <button className={styles.li2}>Edit Status</button>
+                                    <button className={styles.li2} onClick={() => { togglePopupEditStatus() }}>Edit Status</button>
                                 </li>
                             ))}
                         </ul>

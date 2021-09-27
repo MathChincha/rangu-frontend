@@ -1,5 +1,5 @@
 import format from 'date-fns/format';
-import ptBR from 'date-fns/locale/pt-BR';
+import enUS from 'date-fns/locale/en-US';
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png'
 
@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 
 export default function Header(props) {
     const currentDate = format(new Date(), 'EEEEEE, d MMMM', {
-        locale: ptBR,
+        locale: enUS,
     });
     const isActive = useState(props.isActive);
 
