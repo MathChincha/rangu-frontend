@@ -12,6 +12,21 @@ export default function Reports({ history }) {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
 
+    const [editID, setEditID] = useState('');
+    const [editName, setEditName] = useState('');
+    const [editEmail, setEditEmail] = useState('');
+    const [editPassword, setEditPassword] = useState('');
+    const [editPhone, setEditPhone] = useState('');
+
+
+    function editEmployee(employee) {
+        setEditID(employee.id);
+        setEditEmail(employee.email);
+        setEditName(employee.name);
+        setEditPassword(employee.password);
+        setEditPhone(employee.phone);
+    }
+
     function togglePopupNewEmp() {
         setIsOpenNewEmp(!isOpenNewEmp);
     }
@@ -102,10 +117,10 @@ export default function Reports({ history }) {
                 isOpenEditEmp && <Popup
                     content={<>
                         <b>Edit employee</b>
-                        <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                        <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
-                        <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                        <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
+                        <input placeholder="Email" name="editEmail" id="editEmail" value={editEmail} onChange={event => setEditEmail(event.target.value)} />
+                        <input placeholder="Name" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
+                        <input placeholder="Password" name="editPassword" id="editPassword" type="password" value={editPassword} onChange={event => setEditPassword(event.target.value)} />
+                        <input placeholder="Phone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
                         <div>
                             <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Edit Employee</button>
                             <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Cancel</button>
@@ -137,7 +152,7 @@ export default function Reports({ history }) {
                             <strong className={styles.dishName}>{employesss.password}</strong>
                             <strong className={styles.comments}>{employesss.phone}</strong>
                             <button className={styles.ul} onClick={() => { togglePopupRemoveEmp() }}>Remove Employee</button>
-                            <button className={styles.li2} onClick={() => { togglePopupEditEmp() }}>Edit Employee</button>
+                            <button className={styles.li2} onClick={() => { editEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
                         </ul>
                     </>
                 ))}

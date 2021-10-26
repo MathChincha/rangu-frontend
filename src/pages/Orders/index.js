@@ -177,7 +177,7 @@ export default function Orders({ history }) {
             <div className={styles.menuContainer}>
                 {table.map((table) => (
                     <>
-                        <h1 className={styles.title} key={table.id}>{table.table}</h1>
+                        <h1 className={styles.title}>{table.table}</h1>
                         <ul className={styles.foodList} key={table.id}>
                             <button className={styles.ul} onClick={() => { togglePopupRemovePerson() }}>Remove Person</button>
                             <button className={styles.ul} onClick={() => { togglePopupCheckout() }}>Checkout</button>
