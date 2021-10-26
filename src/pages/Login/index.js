@@ -28,7 +28,9 @@ export default function Login({ history }) {
                 });
             console.log(response);
             sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('idR', '3ce10558-5de9-42f1-8317-28aaa94268d4');
             console.log(sessionStorage.getItem('token'));
+            console.log(sessionStorage.getItem('idR'));
             setIsLoading(false);
             history.push('/menu');
         } catch (err) {
