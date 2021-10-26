@@ -1,5 +1,5 @@
 import format from 'date-fns/format';
-import ptBR from 'date-fns/locale/pt-BR';
+import enUS from 'date-fns/locale/en-US';
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png'
 
@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 
 export default function Header(props) {
     const currentDate = format(new Date(), 'EEEEEE, d MMMM', {
-        locale: ptBR,
+        locale: enUS,
     });
     const isActive = useState(props.isActive);
 
@@ -37,7 +37,10 @@ export default function Header(props) {
                         <span className={styles.Header} onClick={() => { props.menu() }}>Menu</span>
                         <span className={styles.Header} onClick={() => { props.profile() }}>Profile</span>
                         <span className={styles.Header} onClick={() => { props.orders() }}>Orders</span>
-                        <span className={styles.Header} onClick={() => { props.logoff() }}>Logoff</span>
+                        <span className={styles.Header} onClick={() => { props.employess() }}>Employess</span>
+                        <span className={styles.Header} onClick={() => { props.tables() }}>Tables</span>
+                        <span className={styles.Header} onClick={() => { props.reports() }}>Reports</span>
+                        <span className={styles.Header} onClick={() => { sessionStorage.clear(); props.logoff() }}>Logoff</span>
                     </div> : null
                 }
             </div>
