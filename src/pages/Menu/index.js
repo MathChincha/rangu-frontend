@@ -1,34 +1,47 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import styles from './menu.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
+import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import { apiMenu } from '../../services/api'
 
 import Loading from '../../assets/Loading.gif'
+import camera from '../../assets/camera.svg'
 
 export default function Menu({ history }) {
+
+    //Variavéis dos PopUPS
     const [isOpenNewCategory, setIsOpenNewCategory] = useState(false);
     const [isOpenNewItem, setIsOpenNewItem] = useState(false);
     const [isOpenEditItem, setIsOpenEditItem] = useState(false);
     const [isOpenDisableCategory, setIsOpenDisableCategory] = useState(false);
     const [isOpenDisableItem, setIsOpenDisableItem] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    //Variaveis para criar as comidas
     const [category, setCategory] = useState('');
+    const [dishImage, setDishImage] = useState(null);
     const [dishName, setDishName] = useState('');
     const [description, setDescription] = useState('');
     const [eta, setEta] = useState('');
     const [price, setPrice] = useState('');
-    const [dishImage, setDishImage] = useState('');
+
+    //Variaveis dos arrays trazidos pelas API's
     const [foodArray, setFoodArray] = useState([]);
     const [categoryArray, setCategoryArray] = useState([]);
 
+    //Variaveis para editar as comidas
     const [editId, setEditId] = useState('');
     const [editFoodCategory, setEditFoodCategory] = useState('');
-    const [editDishImage, setEditDishImage] = useState('');
+    const [editDishImage, setEditDishImage] = useState(null);
     const [editDishName, setEditDishName] = useState('');
     const [editDescription, setEditDescription] = useState('');
     const [editEta, setEditEta] = useState('');
     const [editPrice, setEditPrice] = useState('');
+
+    const preview = useMemo(() => {
+        return dishImage ? URL.createObjectURL(dishImage) : null;
+    }, [dishImage])
 
     useEffect(() => {
         async function loadCategory() {
@@ -61,6 +74,7 @@ export default function Menu({ history }) {
                 });
                 console.log(response.data);
                 setFoodArray(response.data);
+                console.log(foodArray);
             } catch (err) {
                 alert("Alerta");
             }
@@ -74,7 +88,7 @@ export default function Menu({ history }) {
     function setEditFood(food) {
         setEditId(food.id);
         setEditFoodCategory(food.category);
-        setEditDishImage(food.aimage);
+        setEditDishImage(food.image);
         setEditDishName(food.name);
         setEditEta(food.estimatedTime);
         setEditPrice(food.price);
@@ -100,64 +114,7 @@ export default function Menu({ history }) {
     function togglePopupDisableItem() {
         setIsOpenDisableItem(!isOpenDisableItem);
     }
-    /* antigo array de categoria
-        const foods = [
-            {
-                id: 555,
-                type: 'Hamburguers',
-                foodImg: BigMac,
-                dishName: 'Big Mac',
-                eta: '5 min',
-                price: 'R$ 35.99',
-                description: "There is nothing like it. Two hamburgers, lettuce, cheese and special sauce, onion and pickles on a sesame bun. The flavor of McDonald's is triply delicious. With three 100% beef burgers, melted cheese, onion, pickles, ketchup and mustard. There is nothing like it. Two hamburgers, lettuce, cheese and special sauce, onion and pickles on a sesame bun.",
-            },
-            {
-                id: 666,
-                type: 'Hamburguers',
-                foodImg: McChicken,
-                dishName: 'McChicken',
-                eta: '2 min',
-                price: 'R$ 10.90',
-                description: 'The flavor you love. Breaded and browned chicken with a smooth, creamy sauce, accompanied by crispy lettuce on a sesame bun.',
-            },
-            {
-                id: 777,
-                type: 'Drinks',
-                foodImg: CocaCola,
-                dishName: 'Coca-Cola',
-                eta: '2 min',
-                price: 'R$ 5.00',
-                description: 'A cold Brew',
-            },
-            {
-                id: 888,
-                type: 'Drinks',
-                foodImg: Heineken,
-                dishName: 'Heineken',
-                eta: '2 min',
-                price: 'R$ 6.00',
-                description: 'A cold Brew',
-            },
-            {
-                id: 999,
-                type: 'Dessert',
-                foodImg: Pudim,
-                dishName: 'Pudim',
-                eta: '5 min',
-                price: 'R$ 10.00',
-                description: 'A delicious Pudim, made in the house',
-            },
-            {
-                id: 1111,
-                type: 'Dessert',
-                foodImg: TortaLimao,
-                dishName: 'Lemon Pie',
-                eta: '5 min',
-                price: 'R$ 10.00',
-                description: 'A delicious Lemon Pie, made in the house',
-            },
-        ]
-    */
+
     async function createCategory(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -180,6 +137,73 @@ export default function Menu({ history }) {
             togglePopupNewCategory();
             alert("Erro");
         }
+    }
+
+    async function createFood(event) {
+        event.preventDefault();
+        setIsLoading(true);
+        try {
+            console.log("teste");
+            const user_token = sessionStorage.getItem('token');
+            const id_token = sessionStorage.getItem('idR');
+            const base64 = "https://www.lovelesscafe.com/wp-content/uploads/2019/11/lemon-icebox-pie-recipe.jpg"
+            console.log(id_token);
+            await apiMenu.post('/dishes',
+                {
+                    category: category,
+                    description: description,
+                    estimatedTime: eta,
+                    image: dishImage,
+                    name: dishName,
+                    price: price
+                },
+                {
+                    headers: { restaurantId: id_token }
+                });
+            console.log('deu certo');
+            setIsLoading(false);
+            togglePopupNewItem();
+            alert("Comida criada com sucesso");
+            window.location.reload(false);
+        } catch (err) {
+            setIsLoading(false);
+            togglePopupNewItem();
+            alert("Erro");
+        }
+    }
+
+    async function editFood(event) { /*
+        event.preventDefault();
+        setIsLoading(true);
+        try {
+            console.log("teste");
+            const user_token = sessionStorage.getItem('token');
+            const id_token = sessionStorage.getItem('idR');
+            const base64 = "https://www.lovelesscafe.com/wp-content/uploads/2019/11/lemon-icebox-pie-recipe.jpg"
+            console.log(id_token);
+            await apiMenu.post('/dishes',
+                {
+                    category: category,
+                    description: description,
+                    estimatedTime: eta,
+                    image: dishImage,
+                    name: dishName,
+                    price: price
+                },
+                {
+                    headers: { restaurantId: id_token }
+                });
+            console.log('deu certo');
+            setIsLoading(false);
+            togglePopupNewItem();
+            alert("Comida criada com sucesso");
+            window.location.reload(false);
+        } catch (err) {
+            setIsLoading(false);
+            togglePopupNewItem();
+            alert("Erro");
+        } */
+        setIsOpenEditItem(!isOpenEditItem);
     }
 
     async function handleSubmit(event) {
@@ -214,16 +238,29 @@ export default function Menu({ history }) {
         history.push('/reports');
     }
 
+    function encodeImageFileAsURL(element) {
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            console.log('RESULT', reader.result)
+        }
+        reader.readAsDataURL(file);
+
+        setDishImage(reader.result);
+    }
+
     return (
         <>
             {
-                isOpenNewCategory && <Popup
+                isOpenNewCategory && <CategoryPopup
                     content={<>
-                        <b>Insert the new category</b>
+                        <b>Insira a nova categoria </b>
                         <form onSubmit={createCategory}>
                             <input placeholder="Category" name="category" id="category" value={category} onChange={event => setCategory(event.target.value)} ></input>
-                            <button type="submit" className={styles.insert}>Insert New Category</button>
-                            <button className={styles.insert} onClick={() => { togglePopupNewCategory() }}>Cancel</button>
+                            <div>
+                                <button type="submit" className={styles.insert}>Inserir Nova Categoria</button>
+                                <button className={styles.insert} onClick={() => { togglePopupNewCategory() }}>Cancelar</button>
+                            </div>
                         </form>
                     </>}
                     handleClose={togglePopupNewCategory}
@@ -232,16 +269,25 @@ export default function Menu({ history }) {
             {
                 isOpenNewItem && <Popup
                     content={<>
-                        <b>Insert the new Item</b>
-                        <input type="file" placeholder="Dish Image" name="dishImage" id="dishImage" value={dishImage} onChange={event => setDishImage(event.target.value)} />
-                        <input placeholder="Dish Name" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
-                        <input placeholder="Description" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
-                        <input placeholder="Estimated Time of Arrival" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
-                        <input placeholder="Price" name="price" id="price" value={price} onChange={event => setPrice(event.target.value)} />
-                        <div>
-                            <button className={styles.insert} onClick={() => { togglePopupNewItem() }}>Insert New Item</button>
-                            <button className={styles.insert} onClick={() => { togglePopupNewItem() }}>Cancel</button>
-                        </div>
+                        <b>Insira o novo item</b>
+                        <form onSubmit={createFood}>
+                            <label
+                                id="dishImage"
+                                style={{ backgroundImage: `url(${preview})` }}
+                                className={styles.dishImage}
+                            >
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => setDishImage(event.target.files[0])} />
+                                <img src={camera} alt="Selecione uma Image" />
+                            </label>
+                            <input placeholder="Dish Name" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
+                            <input placeholder="Description" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
+                            <input placeholder="Estimated Time of Arrival" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
+                            <input placeholder="Price" name="price" id="price" value={price} onChange={event => setPrice(event.target.value)} />
+                            <div>
+                                <button type="submit" className={styles.insert}>Inserir Novo Item</button>
+                                <button className={styles.insert} onClick={() => { togglePopupNewItem() }}>Cancelar</button>
+                            </div>
+                        </form>
                     </>}
                     handleClose={togglePopupNewItem}
                 />
@@ -249,28 +295,37 @@ export default function Menu({ history }) {
             {
                 isOpenEditItem && <Popup
                     content={<>
-                        <b>Edit the Item</b>
-                        <input type="file" placeholder="Dish Image" name="editDishImage" id="editDishImage" value={editDishImage} onChange={event => setEditDishImage(event.target.value)} />
-                        <input placeholder="Dish Name" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
-                        <input placeholder="Description" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
-                        <input placeholder="Estimated Time of Arrival" name="editEta" id="editEta" value={editEta} onChange={event => setEditEta(event.target.value)} />
-                        <input placeholder="Price" name="editPrice" id="editPrice" value={editPrice} onChange={event => setEditPrice(event.target.value)} />
-                        <input placeholder="Category" name="editFoodCategory" id="editFoodCategory" value={editFoodCategory} onChange={event => setEditFoodCategory(event.target.value)} />
-                        <div>
-                            <button className={styles.insert} onClick={() => { togglePopupEditItem() }}>Edit the Item</button>
-                            <button className={styles.insert} onClick={() => { togglePopupEditItem() }}>Cancel</button>
-                        </div>
+                        <b>Edite o Item</b>
+                        <form onSubmit={editFood}>
+                            <label
+                                id="DishImage"
+                                className={styles.DishImage}
+                                style={{ backgroundImage: `url(${preview})` }}
+                            >
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => setEditDishImage(event.target.files[0])} />
+                                <img src={editDishImage} alt="Selecione uma Image" />
+                            </label>
+                            <input placeholder="Dish Name" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
+                            <input placeholder="Description" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
+                            <input placeholder="Estimated Time of Arrival" name="editEta" id="editEta" value={editEta} onChange={event => setEditEta(event.target.value)} />
+                            <input placeholder="Price" name="editPrice" id="editPrice" value={editPrice} onChange={event => setEditPrice(event.target.value)} />
+                            <input placeholder="Category" name="editFoodCategory" id="editFoodCategory" value={editFoodCategory} onChange={event => setEditFoodCategory(event.target.value)} />
+                            <div>
+                                <button type="submit" className={styles.insert}>Editar o Item</button>
+                                <button className={styles.insert} onClick={() => { togglePopupEditItem() }}>Cancelar</button>
+                            </div>
+                        </form>
                     </>}
                     handleClose={togglePopupEditItem}
                 />
             }
             {
-                isOpenDisableCategory && <Popup
+                isOpenDisableCategory && <CategoryPopup
                     content={<>
-                        <b>You wish to disable this category?</b>
+                        <b>Você deseja desabilitar essa categoria?</b>
                         <div>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Disable this Category</button>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Cancel</button>
+                            <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Desabilitar a Categoria</button>
+                            <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Cancelar</button>
                         </div>
                     </>}
                     handleClose={togglePopupDisableCategory}
@@ -279,10 +334,10 @@ export default function Menu({ history }) {
             {
                 isOpenDisableItem && <Popup
                     content={<>
-                        <b>You wish to disable this item?</b>
+                        <b>Você deseja desabilitar esse item?</b>
                         <div>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Disable this Item</button>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Cancel</button>
+                            <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Desabilitar o Item</button>
+                            <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Cancelar</button>
                         </div>
                     </>}
                     handleClose={togglePopupDisableItem}
@@ -297,23 +352,23 @@ export default function Menu({ history }) {
             }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
-                <button className={styles.newCategory} onClick={() => { togglePopupNewCategory() }}>Create New Category</button>
+                <button className={styles.newCategory} onClick={() => { togglePopupNewCategory() }}>Criar Nova Categoria</button>
                 <div>
                     {categoryArray.map((category, index) => (
                         <>
                             <h1 className={styles.title}>{category.name}</h1>
                             <ul className={styles.foodList} key={index}>
-                                <button className={styles.ul} onClick={() => { togglePopupDisableCategory() }}>Disable Category</button>
-                                <button className={styles.ul} onClick={() => { togglePopupNewItem() }}>Add Item</button>
+                                <button className={styles.ul} onClick={() => { togglePopupDisableCategory() }}>Desabilitar Categoria</button>
+                                <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
                                 {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
                                     <li className={styles.foodList} key={index}>
                                         <img className={styles.dishImg} src={food.image} alt="Food" />
                                         <strong className={styles.dishName}>{food.name}</strong>
-                                        <strong className={styles.description}>Description: {food.description}</strong>
-                                        <strong className={styles.price}>Price: <strong className={styles.color}>{food.price}</strong></strong>
-                                        <strong className={styles.eta}>Time to Prepare: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
-                                        <button className={styles.li1} onClick={() => { togglePopupDisableItem() }}>Disable Item</button>
-                                        <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Edit Item</button>
+                                        <strong className={styles.description}>Descrição: {food.description}</strong>
+                                        <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
+                                        <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
+                                        <button className={styles.li1} onClick={() => { togglePopupDisableItem() }}>Desabilitar Item</button>
+                                        <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
                                     </li>
                                 ))}
                             </ul>
