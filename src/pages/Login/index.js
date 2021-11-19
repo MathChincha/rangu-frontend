@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import styles from './login.module.scss'
-import { apiUsers } from '../../services/api'
-import Popup from '../../components/Popup/Popup'
+import { apiLogin } from '../../services/api'
+import PopupLoading from '../../components/PopupLoading/Popup'
 
 import logo from '../../assets/logo.png'
-import Loading from '../../assets/Loading.gif'
+import Loading from '../../assets/LoadingBK.gif'
 
 export default function Login({ history }) {
     const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ export default function Login({ history }) {
         console.log(type);
 
         try {
-            const response = await apiUsers.post('/login',
+            const response = await apiLogin.post('/login',
                 {
                     email,
                     password,
@@ -28,7 +28,7 @@ export default function Login({ history }) {
                 });
             console.log(response);
             sessionStorage.setItem('token', response.data.token);
-            sessionStorage.setItem('idR', '3ce10558-5de9-42f1-8317-28aaa94268d4');
+            sessionStorage.setItem('idR', response.data.userId);
             console.log(sessionStorage.getItem('token'));
             console.log(sessionStorage.getItem('idR'));
             setIsLoading(false);
@@ -50,7 +50,7 @@ export default function Login({ history }) {
     return (
         <>
             {
-                isLoading && <Popup
+                isLoading && <PopupLoading
                     content={<>
                         <img src={Loading} alt="Loading"></img>
                     </>}

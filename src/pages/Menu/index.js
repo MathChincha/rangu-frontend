@@ -362,7 +362,9 @@ export default function Menu({ history }) {
                                 <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
                                 {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
                                     <li className={styles.foodList} key={index}>
-                                        <img className={styles.dishImg} src={food.image} alt="Food" />
+                                        <div>
+                                            <img className={styles.dishImg} src={food.image} alt="Food" />
+                                        </div>
                                         <strong className={styles.dishName}>{food.name}</strong>
                                         <strong className={styles.description}>Descrição: {food.description}</strong>
                                         <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
