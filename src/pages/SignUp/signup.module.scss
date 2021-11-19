@@ -2,7 +2,6 @@
     div.collumn{
         display: flex;
         flex-direction: column;
-        background-image: linear-gradient(180deg, rgba(215, 35, 60, 0.9), rgba(230, 95, 76, 0.9));
         height: 50rem;
         width: 60rem;
         
@@ -47,16 +46,6 @@
             margin-bottom: 2rem;
             margin-left: 1rem;
             margin-right: 1rem;
-        }
-
-        button {
-            color: #fff;
-            height: 3rem;
-            width: 10rem;
-            border-radius: 1rem;
-            background-color: #592727;
-            opacity: 1;
-            margin-bottom: 2rem;
         }
     
     }

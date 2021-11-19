@@ -8,7 +8,7 @@ import Loading from '../../assets/Loading.gif'
 
 export default function SignUp({ history }) {
 
-    const [name, setName] = useState('');
+    const [ownerName, setOwnerName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [cnpj, setCnpj] = useState('');
@@ -27,18 +27,17 @@ export default function SignUp({ history }) {
         event.preventDefault();
         setIsLoading(true);
 
+
         try {
             console.log("teste");
             await apiUsers.post('/restaurants/sign-up',
                 {
                     restaurantName,
                     cnpj,
-                    user: {
-                        name,
-                        email,
-                        password,
-                        phone
-                    },
+                    ownerName,
+                    email,
+                    password,
+                    phone,
                     address: {
                         district,
                         city,
@@ -53,8 +52,9 @@ export default function SignUp({ history }) {
             alert("Sua solicitação de criação de conta foi enviada, aguarde o e-mail de ativação de conta");
             history.push('/');
         } catch (err) {
+
             setIsLoading(false);
-            alert("Usuário já existe");
+            alert("Erro");
         }
     }
 
@@ -88,7 +88,7 @@ export default function SignUp({ history }) {
                             <input placeholder="State" name="state" id="state" value={state} onChange={event => setState(event.target.value)} />
                         </div>
                         <div className={styles.row}>
-                            <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
+                            <input placeholder="Name" name="name" id="name" value={ownerName} onChange={event => setOwnerName(event.target.value)} />
                             <input placeholder="City" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
                         </div>
                         <div className={styles.row}>
