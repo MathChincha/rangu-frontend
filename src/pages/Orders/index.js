@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './orders.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
+import Loading from '../../components/Loading/Popup'
 
 export default function Orders({ history }) {
     const [isOpenEditStatus, setIsOpenEditStatus] = useState(false);

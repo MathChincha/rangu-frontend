@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styles from './profile.module.scss'
 import Header from '../../components/Header'
-import Popup from '../../components/Popup/Popup'
 import { apiUsers } from '../../services/api'
+import Loading from '../../components/Loading/Popup'
 
 import logo from '../../assets/logo.png'
-import Loading from '../../assets/Loading.gif'
 
 export default function Profile({ history }) {
 
@@ -26,6 +25,7 @@ export default function Profile({ history }) {
 
     useEffect(() => {
         async function loadData() {
+            setIsLoading(true);
             const user_id = sessionStorage.getItem('idR');
             console.log(user_id);
             try {
@@ -43,8 +43,14 @@ export default function Profile({ history }) {
                 setDistrict(response.data.address.district);
                 setStreet(response.data.address.street);
                 setNumber(response.data.address.number);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             } catch (err) {
                 alert("Alerta");
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             }
         }
         loadData();
@@ -126,11 +132,7 @@ export default function Profile({ history }) {
     return (
         <>
             {
-                isLoading && <Popup
-                    content={<>
-                        <img src={Loading} alt="Loading"></img>
-                    </>}
-                />
+                isLoading && <Loading />
             }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
