@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './orders.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
+import Loading from '../../components/Loading/Popup'
 
 export default function Orders({ history }) {
     const [isOpenEditStatus, setIsOpenEditStatus] = useState(false);
@@ -164,7 +165,14 @@ export default function Orders({ history }) {
                 isOpenEditStatus && <Popup
                     content={<>
                         <b>Edit the Status</b>
-                        <input></input>
+                        <input list="status"></input>
+                        <datalist id="status">
+                            <option value="Enviado">Enviado</option>
+                            <option value="Em Preparo">Em Preparo</option>
+                            <option value="Pronto">Pronto</option>
+                            <option value="Cancelado">Cancelado</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </datalist >
                         <div>
                             <button className={styles.insert} onClick={() => { togglePopupEditStatus() }}>Edit Status</button>
                             <button className={styles.insert} onClick={() => { togglePopupEditStatus() }}>Cancel</button>

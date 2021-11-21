@@ -8,6 +8,14 @@ export {
     apiUsers
 };
 
+const apiLogin = axios.create({
+    baseURL: 'https://rangu-oauth.herokuapp.com/api/rangu/v1/security/oauth'
+})
+
+export {
+    apiLogin
+};
+
 const apiMenu = axios.create({
     baseURL: 'https://rangu-menu.herokuapp.com/api/rangu/v1'
 })

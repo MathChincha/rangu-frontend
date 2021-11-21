@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import styles from './profile.module.scss'
 import Header from '../../components/Header'
-import Popup from '../../components/Popup/Popup'
 import { apiUsers } from '../../services/api'
+import Loading from '../../components/Loading/Popup'
 
 import logo from '../../assets/logo.png'
-import Loading from '../../assets/Loading.gif'
 
 export default function Profile({ history }) {
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [cnpj, setCnpj] = useState('');
-    const [phone, setPhone] = useState('');
     const [restaurantName, setRestaurantName] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [state, setState] = useState('');
-    const [city, setCity] = useState('');
+    const [ownerName, setOwnerName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [cnpj, setCnpj] = useState('');
     const [district, setDistrict] = useState('');
-    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [postalCode, setPostalCode] = useState('');
     const [number, setNumber] = useState('');
+    const [street, setStreet] = useState('');
+    const [password, setPassword] = useState('');
+
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function loadData() {
-            const user_token = sessionStorage.getItem('token');
-            console.log(user_token);
+            setIsLoading(true);
+            const user_id = sessionStorage.getItem('idR');
+            console.log(user_id);
             try {
-                const response = await apiUsers.get('/restaurants/by-token', {
-                    headers: { Authorization: user_token }
+                const response = await apiUsers.get(`/restaurants/${user_id}`, {
                 });
                 console.log(response.data);
                 setCnpj(response.data.cnpj);
-                setEmail(response.data.user.email);
-                setName(response.data.user.name);
-                setPhone(response.data.user.phone);
+                setEmail(response.data.email);
+                setOwnerName(response.data.ownerName);
+                setPhone(response.data.phone);
                 setRestaurantName(response.data.restaurantName);
                 setPostalCode(response.data.address.postalCode);
                 setState(response.data.address.state);
@@ -43,8 +43,14 @@ export default function Profile({ history }) {
                 setDistrict(response.data.address.district);
                 setStreet(response.data.address.street);
                 setNumber(response.data.address.number);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             } catch (err) {
                 alert("Alerta");
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             }
         }
         loadData();
@@ -57,10 +63,25 @@ export default function Profile({ history }) {
 
         try {
             console.log("teste");
-            const user_token = sessionStorage.getItem('token');
-            await apiUsers.put('/restaurants',
+            const user_id = sessionStorage.getItem('idR');
+            const jason = {
+                body: {
+                    addressUpdate: {
+                        city,
+                        district,
+                        number,
+                        postalCode,
+                        state,
+                        street
+                    },
+                    cnpj,
+                    ownerName,
+                    phone
+                },
+            }
+            console.log(jason);
+            const response = await apiUsers.put(`/restaurants/${user_id}`,
                 {
-                    headers: { Authorization: user_token },
                     body: {
                         addressUpdate: {
                             city,
@@ -71,14 +92,13 @@ export default function Profile({ history }) {
                             street
                         },
                         cnpj,
-                        userUpdate: {
-                            name,
-                            phone
-                        }
+                        ownerName,
+                        phone
                     },
                 });
             console.log('deu certo');
             setIsLoading(false);
+            console.log(response.data);
             alert("Seus dados foram atualizados com sucesso");
             history.push('/');
         } catch (err) {
@@ -112,11 +132,7 @@ export default function Profile({ history }) {
     return (
         <>
             {
-                isLoading && <Popup
-                    content={<>
-                        <img src={Loading} alt="Loading"></img>
-                    </>}
-                />
+                isLoading && <Loading />
             }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
@@ -136,7 +152,7 @@ export default function Profile({ history }) {
                             <input placeholder="State" name="state" id="state" value={state} onChange={event => setState(event.target.value)} />
                         </div>
                         <div className={styles.row}>
-                            <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
+                            <input placeholder="Name" name="name" id="name" value={ownerName} onChange={event => setOwnerName(event.target.value)} />
                             <input placeholder="City" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
                         </div>
                         <div className={styles.row}>

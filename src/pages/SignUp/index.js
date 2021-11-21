@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import styles from './signup.module.scss'
-import Popup from '../../components/Popup/Popup'
+import Loading from '../../components/Loading/Popup'
 import { apiUsers } from '../../services/api'
 import { motion } from "framer-motion"
 
 import logo from '../../assets/logo.png'
-import Loading from '../../assets/Loading.gif'
 
 export default function SignUp({ history }) {
 
-    const [name, setName] = useState('');
+    const [ownerName, setOwnerName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [cnpj, setCnpj] = useState('');
@@ -28,18 +27,17 @@ export default function SignUp({ history }) {
         event.preventDefault();
         setIsLoading(true);
 
+
         try {
             console.log("teste");
             await apiUsers.post('/restaurants/sign-up',
                 {
                     restaurantName,
                     cnpj,
-                    user: {
-                        name,
-                        email,
-                        password,
-                        phone
-                    },
+                    ownerName,
+                    email,
+                    password,
+                    phone,
                     address: {
                         district,
                         city,
@@ -54,8 +52,9 @@ export default function SignUp({ history }) {
             alert("Sua solicitação de criação de conta foi enviada, aguarde o e-mail de ativação de conta");
             history.push('/');
         } catch (err) {
+
             setIsLoading(false);
-            alert("Usuário já existe");
+            alert("Erro");
         }
     }
 
@@ -66,11 +65,7 @@ export default function SignUp({ history }) {
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
             {
-                isLoading && <Popup
-                    content={<>
-                        <img src={Loading} alt="Loading"></img>
-                    </>}
-                />
+                isLoading && <Loading />
             }
             <div className={styles.signUpContainer}>
                 <div className={styles.collumn}>
@@ -88,7 +83,8 @@ export default function SignUp({ history }) {
                             <input placeholder="Estado" name="state" id="state" value={state} onChange={event => setState(event.target.value)} />
                         </div>
                         <div className={styles.row}>
-                            <input placeholder="Nome" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
+
+                            <input placeholder="Nome" name="name" id="name" value={ownerName} onChange={event => setOwnerName(event.target.value)} />
                             <input placeholder="Cidade" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
                         </div>
                         <div className={styles.row}>
