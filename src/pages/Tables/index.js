@@ -6,6 +6,7 @@ import Popup from '../../components/Popup/Popup'
 
 export default function Reports({ history }) {
     const [isOpenNewTables, setIsOpenNewTables] = useState(false);
+    const [isOpenrDeleteTables, setIsOpenDeleteTables] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -77,12 +78,12 @@ export default function Reports({ history }) {
                         <>
                             <h1 className={styles.title} key={table.id}>Table: {table.id}</h1>
                             <div className={styles.QRCode}>
-                                <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={'{id:' + table.id + ',isActive:true}'} />
+                                <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={`{tableId: '${table.id}'}`} />
                             </div>
+                            <button className={styles.deleteTable} onClick={() => { togglePopupNewTables() }}>Remover Mesa</button>
                         </>
                     ))}
                 </div>
-
             </div>
         </>
     );

@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import styles from './login.module.scss'
 import { apiLogin } from '../../services/api'
-import PopupLoading from '../../components/PopupLoading/Popup'
+import Loading from '../../components/Loading/Popup'
 
 import logo from '../../assets/logo.png'
-import Loading from '../../assets/LoadingBK.gif'
 
 export default function Login({ history }) {
     const [email, setEmail] = useState('');
@@ -50,11 +49,7 @@ export default function Login({ history }) {
     return (
         <>
             {
-                isLoading && <PopupLoading
-                    content={<>
-                        <img src={Loading} alt="Loading"></img>
-                    </>}
-                />
+                isLoading && <Loading />
             }
             <div className={styles.loginContainer}>
                 <img src={logo} alt="Logo" />

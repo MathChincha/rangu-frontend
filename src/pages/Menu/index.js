@@ -2,10 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react'
 import styles from './menu.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
+import Loading from '../../components/Loading/Popup'
 import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import { apiMenu } from '../../services/api'
 
-import Loading from '../../assets/Loading.gif'
 import camera from '../../assets/camera.svg'
 
 export default function Menu({ history }) {
@@ -45,6 +45,7 @@ export default function Menu({ history }) {
 
     useEffect(() => {
         async function loadCategory() {
+            setIsLoading(true);
             const user_token = sessionStorage.getItem('token');
             const id_token = sessionStorage.getItem('idR')
             console.log(user_token);
@@ -54,8 +55,14 @@ export default function Menu({ history }) {
                 });
                 console.log(response.data);
                 setCategoryArray(response.data);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             } catch (err) {
                 alert("Alerta");
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             }
         }
         loadCategory();
@@ -65,6 +72,7 @@ export default function Menu({ history }) {
 
     useEffect(() => {
         async function loadData() {
+            setIsLoading(true);
             const user_token = sessionStorage.getItem('token');
             const id_token = sessionStorage.getItem('idR')
             console.log(user_token);
@@ -75,8 +83,14 @@ export default function Menu({ history }) {
                 console.log(response.data);
                 setFoodArray(response.data);
                 console.log(foodArray);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             } catch (err) {
                 alert("Alerta");
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             }
         }
         loadData();
@@ -344,11 +358,7 @@ export default function Menu({ history }) {
                 />
             }
             {
-                isLoading && <Popup
-                    content={<>
-                        <img src={Loading} alt="Loading"></img>
-                    </>}
-                />
+                isLoading && <Loading />
             }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.menuContainer}>
@@ -362,9 +372,7 @@ export default function Menu({ history }) {
                                 <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
                                 {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
                                     <li className={styles.foodList} key={index}>
-                                        <div>
-                                            <img className={styles.dishImg} src={food.image} alt="Food" />
-                                        </div>
+                                        <img className={styles.dishImg} src={food.image} alt="Food" />
                                         <strong className={styles.dishName}>{food.name}</strong>
                                         <strong className={styles.description}>Descrição: {food.description}</strong>
                                         <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>

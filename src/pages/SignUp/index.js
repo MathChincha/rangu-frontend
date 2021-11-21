@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import styles from './signup.module.scss'
-import Popup from '../../components/Popup/Popup'
+import Loading from '../../components/Loading/Popup'
 import { apiUsers } from '../../services/api'
 
 import logo from '../../assets/logo.png'
-import Loading from '../../assets/Loading.gif'
 
 export default function SignUp({ history }) {
 
@@ -65,11 +64,7 @@ export default function SignUp({ history }) {
     return (
         <>
             {
-                isLoading && <Popup
-                    content={<>
-                        <img src={Loading} alt="Loading"></img>
-                    </>}
-                />
+                isLoading && <Loading />
             }
             <div className={styles.signUpContainer}>
                 <div className={styles.collumn}>

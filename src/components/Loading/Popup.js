@@ -1,14 +1,15 @@
 import React from "react";
 import styles from './popup.module.scss'
+import LoadingGif from '../../assets/LoadingBK.gif'
 
-const Popup = props => {
+const Loading = props => {
     return (
         <div className={styles.popup}>
             <div className={styles.box}>
-                {props.content}
+                <img src={LoadingGif} alt="Loading"></img>
             </div>
         </div>
     );
 };
 
-export default Popup;
+export default Loading;
