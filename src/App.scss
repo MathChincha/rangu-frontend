@@ -32,12 +32,14 @@ html, body, #root {
 }
 
 html{
-    background-image: url("assets/back.jpg");
-    background-size: contain;
-    background-position: center;
+    background-image: url("assets/background3.jpg");
+    background-position: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-body,input,textarea, button{
+body,input,textarea{
     font: 500 1rem Arial;
     color: var(--black);
 }
@@ -51,12 +53,3 @@ h2{
     font-size: 1.5rem;
 }
 
-button {
-    color: #fff;
-    height: 3rem;
-    width: 10rem;
-    border-radius: 1rem;
-    background-color: #592727;
-    opacity: 1;
-    cursor: pointer;
-}

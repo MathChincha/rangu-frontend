@@ -1,10 +1,11 @@
+import { motion } from "framer-motion"
 import React, { useState } from 'react'
-import styles from './login.module.scss'
-import { apiUsers } from '../../services/api'
-import Popup from '../../components/Popup/Popup'
-
-import logo from '../../assets/logo.png'
 import Loading from '../../assets/Loading.gif'
+import logo from '../../assets/logo.png'
+import Popup from '../../components/Popup/Popup'
+import { apiUsers } from '../../services/api'
+import styles from './login.module.scss'
+
 
 export default function Login({ history }) {
     const [email, setEmail] = useState('');
@@ -48,7 +49,7 @@ export default function Login({ history }) {
     }
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
             {
                 isLoading && <Popup
                     content={<>
@@ -57,18 +58,17 @@ export default function Login({ history }) {
                 />
             }
             <div className={styles.loginContainer}>
-                <img src={logo} alt="Logo" />
-                <p>Sign In</p>
+                <img className={styles.img}src={logo} alt="Logo" />
                 <form onSubmit={handleSubmit}>
-                    <input placeholder="email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                    <input placeholder="password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                    <button type="submit">Sign In</button>
+                    <input placeholder="E-mail" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
+                    <input placeholder="Senha" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
+                    <button type="submit">Login</button>
                     <div>
-                        <label onClick={ForgotPassword}>Forgot password?</label>
-                        <label onClick={SignUp}>Not a member yet?</label>
+                        <label onClick={ForgotPassword}>Esqueceu a senha?</label>
+                        <label onClick={SignUp}>Ainda não é membro?</label>
                     </div>
                 </form>
             </div>
-        </>
+        </motion.div>
     );
 }

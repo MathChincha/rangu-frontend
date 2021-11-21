@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique+B1&display=swap');
+
+.container{
+    display: flex;
+    width: 80%;
+}
+
+.welcomeContainer{
+    width: 55%;
+    height: 15%;
+    margin-top: 5%;
+    margin-left: 5%;
+    justify-items: center;
+
+    .text {
+        color: white;
+        font-size: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        animation: showText 1s;
+        visibility: hidden;
+        animation-fill-mode: forwards;
+        font-family: 'Shippori Antique B1', sans-serif;
+    
+        @keyframes showText {
+            0%{
+                color: #DA3C30;
+                margin-top: -60px;
+            }
+            100% {
+                color: white;
+                visibility: visible;
+              }
+    
+        }   
+    }
+
+    .btn {
+        color: #fff;
+        height: 2.5rem;
+        width: 9rem;
+        font-size: 1.1rem;
+        font-family: 'Shippori Antique B1', sans-serif;
+        border-radius: 1rem;
+        background-color: #DBC65B;
+        border: 0;
+        margin: 1rem;
+        visibility: hidden;
+        animation: showButton 1s;
+        animation-delay: 2s;
+        animation-fill-mode: forwards;
+        transition: transform 0.5s ease;
+
+
+        @keyframes showButton {
+            from{
+                color: #DA3C30;
+                background-color: #DA3C30;
+                margin-left: -60px;
+            }
+            to {
+                color: #fff;
+                background-color: #DBC65B;
+                visibility: visible;
+              }
+        }
+    }
+    .btn:hover {
+        animation-fill-mode: none;
+        cursor: pointer;
+        visibility: visible;
+        transform: scale(1.1);
+        background-color: #D4BF59;
+        transition-duration: 0.5s;
+    }
+
+}
+
+
+.iconContainer {
+    width: 40%;
+    margin-top: 8%;
+    justify-items: center;
+
+    .icon{
+        width: 80%;
+        height: auto;
+        margin-left: 25%;
+        animation: showIcon 2s;
+        visibility: hidden;
+        animation-delay: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes showIcon {
+        0%{
+            margin-top: -60px;
+            opacity: 0;
+        }
+        100% {
+            visibility: visible;
+          }
+    }
+}
