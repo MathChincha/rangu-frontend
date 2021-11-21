@@ -1,8 +1,9 @@
+import { motion } from "framer-motion"
 import React, { useState } from 'react'
 import styles from './login.module.scss'
 import { apiLogin } from '../../services/api'
 import Loading from '../../components/Loading/Popup'
-
+import styles from './login.module.scss'
 import logo from '../../assets/logo.png'
 
 export default function Login({ history }) {
@@ -47,23 +48,22 @@ export default function Login({ history }) {
     }
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
             {
                 isLoading && <Loading />
             }
             <div className={styles.loginContainer}>
-                <img src={logo} alt="Logo" />
-                <p>Sign In</p>
+                <img className={styles.img}src={logo} alt="Logo" />
                 <form onSubmit={handleSubmit}>
-                    <input placeholder="email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                    <input placeholder="password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                    <button type="submit">Sign In</button>
+                    <input placeholder="E-mail" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
+                    <input placeholder="Senha" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
+                    <button type="submit">Login</button>
                     <div>
-                        <label onClick={ForgotPassword}>Forgot password?</label>
-                        <label onClick={SignUp}>Not a member yet?</label>
+                        <label onClick={ForgotPassword}>Esqueceu a senha?</label>
+                        <label onClick={SignUp}>Ainda não é membro?</label>
                     </div>
                 </form>
             </div>
-        </>
+        </motion.div>
     );
 }

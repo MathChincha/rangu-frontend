@@ -1,25 +1,19 @@
 .loginContainer{
     height: 30rem;
     width: 30rem;
-
-    margin-top: 5rem;
+    margin-top: 2%;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 1rem;
 
     align-items: center;
     justify-items: center;
 
     img {
         height: 5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         margin-left: 13rem;
         margin-top: 1rem;
-    }
-
-    p {
-        font: 500 2rem Arial;
-        margin-left: 12rem;
-        margin-bottom: 1rem;
     }
 
     form {
@@ -29,10 +23,9 @@
         justify-items: center;
 
         input {
-            height: 1.5rem;
-            width: 25rem;
-            border-radius: 1rem;
-            border: none;
+            width: 70%;
+            border: 0;
+            border-radius: 2rem;
             padding: 1rem 1rem;
             margin-bottom: 2rem;
         }
@@ -43,6 +36,28 @@
         margin-right: 2rem;
         margin-left: 2rem;
         cursor: pointer;
+        font-family: 'Shippori Antique B1', sans-serif;
+    }
+
+    button {
+        color: #fff;
+        height: 2.5rem;
+        width: 9rem;
+        font-size: 1.1rem;
+        border-radius: 1rem;
+        background-color: #DBC65B;
+        border: 0;
+        margin-bottom: 1rem;
+        font-family: 'Shippori Antique B1', sans-serif;
+        transition: transform 0.5s ease;
+    }
+    button:hover {
+        animation-fill-mode: none;
+        cursor: pointer;
+        visibility: visible;
+        transform: scale(1.1);
+        background-color: #D4BF59;
+        transition-duration: 0.5s;
     }
 
 }

@@ -34,13 +34,15 @@ html, body, #root {
 }
 
 html{
-    background-image: url("assets/back.jpg");
+    background-image: url("assets/background3.jpg");
     background-position: bottom;
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-body,input,textarea, button{
+
+body,input,textarea{
     font: 500 1rem Arial;
     color: var(--black);
 }
@@ -62,3 +64,4 @@ button {
     opacity: 1;
     cursor: pointer;
 }
+
