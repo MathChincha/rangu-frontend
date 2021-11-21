@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import styles from './login.module.scss'
 import { apiLogin } from '../../services/api'
 import Loading from '../../components/Loading/Popup'
-import styles from './login.module.scss'
 import logo from '../../assets/logo.png'
 
 export default function Login({ history }) {
