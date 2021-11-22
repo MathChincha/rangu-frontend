@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import styles from './menu.module.scss'
 import Header from '../../components/Header'
-import Popup from '../../components/Popup/Popup'
+import Item from '../../components/Item/item'
 import Loading from '../../components/Loading/Popup'
 import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import { apiMenu } from '../../services/api'
@@ -17,6 +17,11 @@ export default function Menu({ history }) {
     const [isOpenDisableCategory, setIsOpenDisableCategory] = useState(false);
     const [isOpenDisableItem, setIsOpenDisableItem] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    //Variaveis para Deletar/Desabilitar
+    const [deleteId, setDeleteId] = useState('');
+    const [deleteFName, setDeleteFName] = useState('');
+    const [deleteCName, setDeleteCName] = useState('');
 
     //Variaveis para criar as comidas
     const [category, setCategory] = useState('');
@@ -40,8 +45,12 @@ export default function Menu({ history }) {
     const [editPrice, setEditPrice] = useState('');
 
     const preview = useMemo(() => {
-        return dishImage ? URL.createObjectURL(dishImage) : null;
+        return dishImage;
     }, [dishImage])
+
+    const editPreview = useMemo(() => {
+        return editDishImage;
+    }, [editDishImage])
 
     useEffect(() => {
         async function loadCategory() {
@@ -55,14 +64,10 @@ export default function Menu({ history }) {
                 });
                 console.log(response.data);
                 setCategoryArray(response.data);
-                setTimeout(function () {
-                    setIsLoading(false);
-                }, 2000);
+                setIsLoading(false);
             } catch (err) {
                 alert("Alerta");
-                setTimeout(function () {
-                    setIsLoading(false);
-                }, 2000);
+                setIsLoading(false);
             }
         }
         loadCategory();
@@ -83,14 +88,10 @@ export default function Menu({ history }) {
                 console.log(response.data);
                 setFoodArray(response.data);
                 console.log(foodArray);
-                setTimeout(function () {
-                    setIsLoading(false);
-                }, 2000);
+                setIsLoading(false);
             } catch (err) {
                 alert("Alerta");
-                setTimeout(function () {
-                    setIsLoading(false);
-                }, 2000);
+                setIsLoading(false);
             }
         }
         loadData();
@@ -107,6 +108,17 @@ export default function Menu({ history }) {
         setEditEta(food.estimatedTime);
         setEditPrice(food.price);
         setEditDescription(food.description);
+    }
+
+    function setDeleteFood(food, category) {
+        setDeleteId(food.id);
+        setDeleteFName(food.name);
+        setDeleteCName(category);
+    }
+
+    function setDeleteCategory(category) {
+        setDeleteId(category.id);
+        setDeleteCName(category.name);
     }
 
     function togglePopupNewCategory() {
@@ -186,47 +198,62 @@ export default function Menu({ history }) {
         }
     }
 
-    async function editFood(event) { /*
+    async function editFood(event) {
         event.preventDefault();
         setIsLoading(true);
         try {
-            console.log("teste");
+            console.log("teste para editar a comida");
             const user_token = sessionStorage.getItem('token');
             const id_token = sessionStorage.getItem('idR');
             const base64 = "https://www.lovelesscafe.com/wp-content/uploads/2019/11/lemon-icebox-pie-recipe.jpg"
             console.log(id_token);
-            await apiMenu.post('/dishes',
+            console.log(editId);
+            await apiMenu.put(`/dishes/${editId}`,
                 {
-                    category: category,
-                    description: description,
-                    estimatedTime: eta,
-                    image: dishImage,
-                    name: dishName,
-                    price: price
+                    category: editFoodCategory,
+                    description: editDescription,
+                    estimatedTime: editEta,
+                    image: editDishImage,
+                    name: editDishName,
+                    price: editPrice
                 },
                 {
                     headers: { restaurantId: id_token }
                 });
             console.log('deu certo');
             setIsLoading(false);
-            togglePopupNewItem();
-            alert("Comida criada com sucesso");
+            togglePopupEditItem();
+            alert("Comida editada com sucesso");
             window.location.reload(false);
         } catch (err) {
             setIsLoading(false);
-            togglePopupNewItem();
+            togglePopupEditItem();
             alert("Erro");
-        } */
-        setIsOpenEditItem(!isOpenEditItem);
+        }
     }
 
-    async function handleSubmit(event) {
-        event.preventDefault();
+    async function deleteDish() {
+        setIsLoading(true);
 
         try {
-            history.push('/signup')
+            console.log("teste de Deletar Prato");
+            console.log(deleteId);
+            const user_token = sessionStorage.getItem('token');
+            const id_token = sessionStorage.getItem('idR');
+            console.log(id_token);
+            await apiMenu.delete(`/dishes/${deleteId}`,
+                {
+                    headers: { restaurantId: id_token }
+                });
+            console.log('deu certo');
+            setIsLoading(false);
+            togglePopupDisableItem();
+            alert("Comida editada com sucesso");
+            window.location.reload(false);
         } catch (err) {
-            alert("Alerta");
+            setIsLoading(false);
+            togglePopupDisableItem();
+            alert(err);
         }
     }
 
@@ -253,14 +280,38 @@ export default function Menu({ history }) {
     }
 
     function encodeImageFileAsURL(element) {
-        var file = element.files[0];
-        var reader = new FileReader();
-        reader.onloadend = function () {
-            console.log('RESULT', reader.result)
-        }
-        reader.readAsDataURL(file);
+        setDishImage(element);
+        console.log("BASE64");
+        console.log(element);
+        var filesSelected = element;
 
-        setDishImage(reader.result);
+        var fileToLoad = filesSelected;
+
+        var fileReader = new FileReader();
+
+        fileReader.onload = function (fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+            setDishImage(srcData);
+            console.log(srcData);
+        }
+        fileReader.readAsDataURL(fileToLoad);
+    }
+    function encodeEditImageFileAsURL(element) {
+        setEditDishImage(element);
+        console.log("BASE64");
+        console.log(element);
+        var filesSelected = element;
+
+        var fileToLoad = filesSelected;
+
+        var fileReader = new FileReader();
+
+        fileReader.onload = function (fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+            setEditDishImage(srcData);
+            console.log(srcData);
+        }
+        fileReader.readAsDataURL(fileToLoad);
     }
 
     return (
@@ -281,7 +332,7 @@ export default function Menu({ history }) {
                 />
             }
             {
-                isOpenNewItem && <Popup
+                isOpenNewItem && <Item
                     content={<>
                         <b>Insira o novo item</b>
                         <form onSubmit={createFood}>
@@ -290,7 +341,7 @@ export default function Menu({ history }) {
                                 style={{ backgroundImage: `url(${preview})` }}
                                 className={styles.dishImage}
                             >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => setDishImage(event.target.files[0])} />
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => encodeImageFileAsURL(event.target.files[0])} />
                                 <img src={camera} alt="Selecione uma Image" />
                             </label>
                             <input placeholder="Dish Name" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
@@ -307,17 +358,17 @@ export default function Menu({ history }) {
                 />
             }
             {
-                isOpenEditItem && <Popup
+                isOpenEditItem && <Item
                     content={<>
                         <b>Edite o Item</b>
                         <form onSubmit={editFood}>
                             <label
-                                id="DishImage"
-                                className={styles.DishImage}
-                                style={{ backgroundImage: `url(${preview})` }}
+                                id="editDishImage"
+                                style={{ backgroundImage: `url(${editPreview})` }}
+                                className={styles.editDishImage}
                             >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => setEditDishImage(event.target.files[0])} />
-                                <img src={editDishImage} alt="Selecione uma Image" />
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => encodeEditImageFileAsURL(event.target.files[0])} />
+                                <img src={camera} alt="Selecione uma Image" />
                             </label>
                             <input placeholder="Dish Name" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
                             <input placeholder="Description" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
@@ -336,7 +387,7 @@ export default function Menu({ history }) {
             {
                 isOpenDisableCategory && <CategoryPopup
                     content={<>
-                        <b>Você deseja desabilitar essa categoria?</b>
+                        <b>Você deseja desabilitar a categoria <strong>{deleteCName}</strong>?</b>
                         <div>
                             <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Desabilitar a Categoria</button>
                             <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Cancelar</button>
@@ -346,11 +397,11 @@ export default function Menu({ history }) {
                 />
             }
             {
-                isOpenDisableItem && <Popup
+                isOpenDisableItem && <CategoryPopup
                     content={<>
-                        <b>Você deseja desabilitar esse item?</b>
+                        <b>Você deseja desabilitar o item <strong>{deleteFName}</strong> da categoria <strong>{deleteCName}</strong>?</b>
                         <div>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Desabilitar o Item</button>
+                            <button className={styles.insert} onClick={() => { deleteDish() }}>Desabilitar o Item</button>
                             <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Cancelar</button>
                         </div>
                     </>}
@@ -368,7 +419,7 @@ export default function Menu({ history }) {
                         <>
                             <h1 className={styles.title}>{category.name}</h1>
                             <ul className={styles.foodList} key={index}>
-                                <button className={styles.ul} onClick={() => { togglePopupDisableCategory() }}>Desabilitar Categoria</button>
+                                <button className={styles.ul} onClick={() => { setDeleteCategory(category); togglePopupDisableCategory() }}>Desabilitar Categoria</button>
                                 <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
                                 {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
                                     <li className={styles.foodList} key={index}>
@@ -377,7 +428,7 @@ export default function Menu({ history }) {
                                         <strong className={styles.description}>Descrição: {food.description}</strong>
                                         <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
                                         <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
-                                        <button className={styles.li1} onClick={() => { togglePopupDisableItem() }}>Desabilitar Item</button>
+                                        <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
                                         <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
                                     </li>
                                 ))}

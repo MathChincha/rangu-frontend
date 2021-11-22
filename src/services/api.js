@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+
 const apiUsers = axios.create({
     baseURL: 'https://rangu-users.herokuapp.com/api/rangu/v1'
 })
@@ -17,7 +19,12 @@ export {
 };
 
 const apiMenu = axios.create({
-    baseURL: 'https://rangu-menu.herokuapp.com/api/rangu/v1'
+    baseURL: 'https://rangu-menu.herokuapp.com/api/rangu/v1',
+    withCredentials: false,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+    }
 })
 
 export {
