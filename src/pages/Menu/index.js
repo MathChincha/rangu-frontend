@@ -52,6 +52,7 @@ export default function Menu({ history }) {
         return editDishImage;
     }, [editDishImage])
 
+    //UseEffect para carregar todas as categorias cadastradas
     useEffect(() => {
         async function loadCategory() {
             setIsLoading(true);
@@ -74,7 +75,7 @@ export default function Menu({ history }) {
         console.log('teste');
         console.log(categoryArray);
     }, []);
-
+    //UseEffect para carregar todas as comidas cadastradas
     useEffect(() => {
         async function loadData() {
             setIsLoading(true);
@@ -99,7 +100,7 @@ export default function Menu({ history }) {
         console.log(foodArray);
     }, []);
 
-
+    //Função para setar qual comida vai ser editada
     function setEditFood(food) {
         setEditId(food.id);
         setEditFoodCategory(food.category);
@@ -109,38 +110,63 @@ export default function Menu({ history }) {
         setEditPrice(food.price);
         setEditDescription(food.description);
     }
-
+    //Função para setar qual comida vai ser deletada
     function setDeleteFood(food, category) {
         setDeleteId(food.id);
         setDeleteFName(food.name);
         setDeleteCName(category);
     }
-
+    //Função para setar qual categoria vai ser deletada
     function setDeleteCategory(category) {
         setDeleteId(category.id);
         setDeleteCName(category.name);
     }
-
+    //Funções para abrir e fechar os PopUp
     function togglePopupNewCategory() {
         setIsOpenNewCategory(!isOpenNewCategory);
     }
-
     function togglePopupNewItem() {
         setIsOpenNewItem(!isOpenNewItem);
     }
-
     function togglePopupEditItem() {
         setIsOpenEditItem(!isOpenEditItem);
     }
-
     function togglePopupDisableCategory() {
         setIsOpenDisableCategory(!isOpenDisableCategory);
     }
-
     function togglePopupDisableItem() {
         setIsOpenDisableItem(!isOpenDisableItem);
     }
-
+    //Função para deletar uma categoria
+    async function deleteCategory() {
+        setIsLoading(true);
+        try {
+            console.log("teste");
+            const user_token = sessionStorage.getItem('token');
+            const id_token = sessionStorage.getItem('idR')
+            console.log(id_token);
+            console.log(deleteCName);
+            await apiMenu.delete('/category',
+                {
+                    params: {
+                        category: deleteCName
+                    },
+                    headers: {
+                        restaurantId: id_token
+                    }
+                });
+            console.log('deu certo');
+            setIsLoading(false);
+            togglePopupDisableCategory();
+            alert("Categoria deletada com sucesso");
+            window.location.reload(false);
+        } catch (err) {
+            setIsLoading(false);
+            togglePopupDisableCategory();
+            alert(err);
+        }
+    }
+    //Função para criar uma categoria
     async function createCategory(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -164,7 +190,7 @@ export default function Menu({ history }) {
             alert("Erro");
         }
     }
-
+    //Função para criar um prato
     async function createFood(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -179,7 +205,7 @@ export default function Menu({ history }) {
                     category: category,
                     description: description,
                     estimatedTime: eta,
-                    image: dishImage,
+                    image: base64,
                     name: dishName,
                     price: price
                 },
@@ -197,7 +223,7 @@ export default function Menu({ history }) {
             alert("Erro");
         }
     }
-
+    //Função para Editar um prato
     async function editFood(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -208,6 +234,14 @@ export default function Menu({ history }) {
             const base64 = "https://www.lovelesscafe.com/wp-content/uploads/2019/11/lemon-icebox-pie-recipe.jpg"
             console.log(id_token);
             console.log(editId);
+            console.log({
+                category: editFoodCategory,
+                description: editDescription,
+                estimatedTime: editEta,
+                image: editDishImage,
+                name: editDishName,
+                price: editPrice
+            });
             await apiMenu.put(`/dishes/${editId}`,
                 {
                     category: editFoodCategory,
@@ -221,6 +255,7 @@ export default function Menu({ history }) {
                     headers: { restaurantId: id_token }
                 });
             console.log('deu certo');
+
             setIsLoading(false);
             togglePopupEditItem();
             alert("Comida editada com sucesso");
@@ -231,7 +266,7 @@ export default function Menu({ history }) {
             alert("Erro");
         }
     }
-
+    //Função para deletar um Prato
     async function deleteDish() {
         setIsLoading(true);
 
@@ -248,7 +283,7 @@ export default function Menu({ history }) {
             console.log('deu certo');
             setIsLoading(false);
             togglePopupDisableItem();
-            alert("Comida editada com sucesso");
+            alert("Comida removida com sucesso");
             window.location.reload(false);
         } catch (err) {
             setIsLoading(false);
@@ -256,7 +291,7 @@ export default function Menu({ history }) {
             alert(err);
         }
     }
-
+    //Funções para trocar de tela
     function logoff() {
         history.push('/');
     }
@@ -389,7 +424,7 @@ export default function Menu({ history }) {
                     content={<>
                         <b>Você deseja desabilitar a categoria <strong>{deleteCName}</strong>?</b>
                         <div>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Desabilitar a Categoria</button>
+                            <button className={styles.insert} onClick={() => { deleteCategory() }}>Desabilitar a Categoria</button>
                             <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Cancelar</button>
                         </div>
                     </>}

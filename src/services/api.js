@@ -32,7 +32,7 @@ export {
 };
 
 const apiOrders = axios.create({
-    baseURL: 'https://rangu-orders.herokuapp.com/api/rangu/v1'
+    baseURL: 'https://rangu-orders.herokuapp.com/api/rangu/v1/orders'
 })
 
 export {

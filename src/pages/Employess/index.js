@@ -2,11 +2,16 @@ import React, { useState } from 'react'
 import styles from './employess.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
+import Loading from '../../components/Loading/Popup'
+
+import { apiUsers } from '../../services/api'
 
 export default function Reports({ history }) {
     const [isOpenNewEmp, setIsOpenNewEmp] = useState(false);
     const [isOpenEditEmp, setIsOpenEditEmp] = useState(false);
     const [isOpenRemoveEmp, setIsOpenRemoveEmp] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -18,6 +23,34 @@ export default function Reports({ history }) {
     const [editPassword, setEditPassword] = useState('');
     const [editPhone, setEditPhone] = useState('');
 
+    //Função para criar um employee
+    async function newEmployee(event) {
+        event.preventDefault();
+        setIsLoading(true);
+        try {
+            console.log("teste");
+            const user_token = sessionStorage.getItem('token');
+            const id_token = sessionStorage.getItem('idR')
+            console.log(id_token);
+            await apiUsers.post(`/restaurants/${id_token}/employee`,
+                {
+                    email: email,
+                    name: name,
+                    //password: password,
+                    phone: phone
+                }
+            );
+            console.log('deu certo');
+            setIsLoading(false);
+            togglePopupNewEmp();
+            alert("Funcionário criado com sucesso");
+            window.location.reload(false);
+        } catch (err) {
+            setIsLoading(false);
+            togglePopupNewEmp();
+            alert("Erro");
+        }
+    }
 
     function editEmployee(employee) {
         setEditID(employee.id);
@@ -97,18 +130,21 @@ export default function Reports({ history }) {
 
     return (
         <>
+
             {
                 isOpenNewEmp && <Popup
                     content={<>
-                        <b>Insert the new employee</b>
-                        <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                        <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
-                        <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                        <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
-                        <div>
-                            <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Insert New Employee</button>
-                            <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Cancel</button>
-                        </div>
+                        <form onSubmit={newEmployee}>
+                            <b>Insert the new employee</b>
+                            <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
+                            <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
+                            <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
+                            <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
+                            <div>
+                                <button type="submit" className={styles.insert} >Insert New Employee</button>
+                                <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Cancel</button>
+                            </div>
+                        </form>
                     </>}
                     handleClose={togglePopupNewEmp}
                 />
@@ -140,6 +176,9 @@ export default function Reports({ history }) {
                     </>}
                     handleClose={togglePopupRemoveEmp}
                 />
+            }
+            {
+                isLoading && <Loading />
             }
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.tableContainer}>

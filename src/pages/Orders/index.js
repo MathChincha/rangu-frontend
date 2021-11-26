@@ -1,13 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './orders.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
 import Loading from '../../components/Loading/Popup'
 
+import { apiOrders } from '../../services/api'
+
 export default function Orders({ history }) {
     const [isOpenEditStatus, setIsOpenEditStatus] = useState(false);
     const [isOpenCheckout, setIsOpenCheckout] = useState(false);
     const [isOpenRemovePerson, setIsOpenRemovePerson] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    const [orderArray, setOrderArray] = useState([]);
+
+    useEffect(() => {
+        async function loadData() {
+            setIsLoading(true);
+            const user_token = sessionStorage.getItem('token');
+            const id_token = sessionStorage.getItem('idR')
+            console.log(user_token);
+            console.log("pegando os pedidos")
+            try {
+                const response = await apiOrders.get('/restaurants', {
+                    headers: { restaurantId: id_token }
+                });
+                console.log(response.data);
+                setOrderArray(response.data);
+                console.log(orderArray);
+                setIsLoading(false);
+                console.log("deu certo")
+            } catch (err) {
+                alert(err);
+                setIsLoading(false);
+            }
+        }
+        loadData();
+        console.log('teste');
+        console.log(orderArray);
+    }, []);
 
     function togglePopupEditStatus() {
         setIsOpenEditStatus(!isOpenEditStatus);
@@ -133,6 +165,9 @@ export default function Orders({ history }) {
 
     return (
         <>
+            {
+                isLoading && <Loading />
+            }
             {
                 isOpenCheckout && <Popup
                     content={<>
