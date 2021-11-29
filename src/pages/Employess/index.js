@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './employess.module.scss'
 import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
@@ -23,6 +23,30 @@ export default function Reports({ history }) {
     const [editPassword, setEditPassword] = useState('');
     const [editPhone, setEditPhone] = useState('');
 
+    const [employees, setEmployees] = useState([]);
+
+    //UseEffect para carregar todos os employees cadastradas
+    useEffect(() => {
+        async function loadData() {
+            setIsLoading(true);
+            const user_id = sessionStorage.getItem('idR');
+            console.log(user_id);
+            try {
+                const response = await apiUsers.get(`/restaurants/${user_id}`, {
+                });
+                console.log(response.data);
+                setEmployees(response.data.employees);
+                console.log(employees);
+                setIsLoading(false);
+            } catch (err) {
+                alert("Alerta");
+                setIsLoading(false);
+            }
+        }
+        loadData();
+        console.log('teste');
+    }, []);
+
     //Função para criar um employee
     async function newEmployee(event) {
         event.preventDefault();
@@ -36,7 +60,7 @@ export default function Reports({ history }) {
                 {
                     email: email,
                     name: name,
-                    //password: password,
+                    password: password,
                     phone: phone
                 }
             );
@@ -59,42 +83,16 @@ export default function Reports({ history }) {
         setEditPassword(employee.password);
         setEditPhone(employee.phone);
     }
-
+    //Funções para abrir e fechar os PopUp
     function togglePopupNewEmp() {
         setIsOpenNewEmp(!isOpenNewEmp);
     }
-
     function togglePopupEditEmp() {
         setIsOpenEditEmp(!isOpenEditEmp);
     }
-
     function togglePopupRemoveEmp() {
         setIsOpenRemoveEmp(!isOpenRemoveEmp);
     }
-
-    const employesss = [
-        {
-            id: 30,
-            email: 'teste@teste.com',
-            name: 'Luiz Silva',
-            password: 'abc123',
-            phone: '98765-4321'
-        },
-        {
-            id: 40,
-            email: 'teste2@teste.com',
-            name: 'Gian Raphael',
-            password: 'abc123',
-            phone: '98765-4321'
-        },
-        {
-            id: 50,
-            email: 'teste3@teste.com',
-            name: 'Leonardo Mariotto',
-            password: 'abc123',
-            phone: '98765-4321'
-        },
-    ]
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -183,7 +181,7 @@ export default function Reports({ history }) {
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
             <div className={styles.tableContainer}>
                 <button className={styles.newEmployee} onClick={() => { togglePopupNewEmp() }}>Create New Employee</button>
-                {employesss.map((employesss) => (
+                {employees.map((employesss) => (
                     <>
                         <ul className={styles.foodList} key={employesss.id}>
                             <strong className={styles.dishName}>{employesss.name}</strong>

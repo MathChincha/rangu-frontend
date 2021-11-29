@@ -39,6 +39,9 @@ export default function Reports({ history }) {
                     headers: { restaurantId: id_token }
                 });
                 console.log(response.data);
+                response.data.sort((a, b) => {
+                    return a.number - b.number;
+                });
                 setMesasArray(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -131,7 +134,7 @@ export default function Reports({ history }) {
             alert("Erro");
         }
     }
-
+    //Funções para abrir e fechar os PopUp
     function togglePopupNewTables() {
         setIsOpenNewTables(!isOpenNewTables);
     }

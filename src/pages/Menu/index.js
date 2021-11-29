@@ -64,6 +64,19 @@ export default function Menu({ history }) {
                     headers: { restaurantId: id_token }
                 });
                 console.log(response.data);
+                response.data.sort((a, b) => {
+                    let fa = a.name.toLowerCase(),
+                        fb = b.name.toLowerCase();
+
+                    if (fa < fb) {
+                        return -1;
+                    }
+                    if (fa > fb) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                console.log(response.data);
                 setCategoryArray(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -87,6 +100,18 @@ export default function Menu({ history }) {
                     headers: { restaurantId: id_token }
                 });
                 console.log(response.data);
+                response.data.sort((a, b) => {
+                    let fa = a.name.toLowerCase(),
+                        fb = b.name.toLowerCase();
+
+                    if (fa < fb) {
+                        return -1;
+                    }
+                    if (fa > fb) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 setFoodArray(response.data);
                 console.log(foodArray);
                 setIsLoading(false);
