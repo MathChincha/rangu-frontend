@@ -5,10 +5,22 @@ import Item from '../../components/Item/item'
 import Loading from '../../components/Loading/Popup'
 import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import { apiMenu } from '../../services/api'
+import { RNS3 } from 'react-native-aws3';
 
 import camera from '../../assets/camera.svg'
 
 export default function Menu({ history }) {
+
+    const optionsProfileS3 = {
+        keyPrefix: "menuFoodImg/",
+        bucket: "rangu-ohio",
+        region: "us-east-2",
+        accessKey: "AKIAXYPJWAUP26AIKWE6",
+        secretKey: "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",
+        successActionStatus: 201
+    };
+
+    const [progressUpload, setProgressUpload] = useState(10);
 
     //Variavéis dos PopUPS
     const [isOpenNewCategory, setIsOpenNewCategory] = useState(false);
@@ -230,7 +242,7 @@ export default function Menu({ history }) {
                     category: category,
                     description: description,
                     estimatedTime: eta,
-                    image: base64,
+                    image: dishImage,
                     name: dishName,
                     price: price
                 },
@@ -339,7 +351,68 @@ export default function Menu({ history }) {
         history.push('/reports');
     }
 
-    function encodeImageFileAsURL(element) {
+    async function uploadS3(element) {
+
+        console.log("AWS")
+        const file = {
+            uri: element,
+            name: 'comida.jpg',
+            type: "image/jpeg"
+        }
+        console.log(file);
+        console.log('Enviando imagem para S3');
+        try {
+            await RNS3.put(element, optionsProfileS3).progress((progress) => {
+                console.log('Uploading: ', progress.percent)
+                if (progress.percent) {
+                    console.log(progress.percent);
+                    setProgressUpload(progress.percent);
+                }
+            })
+                .then(response => {
+                    if (response.status !== 201) {
+                        console.log("Failed to upload image to S3");
+                    }
+                    console.log(response.body.postResponse.location);
+                    setDishImage(response.body.postResponse.location);
+                });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async function uploadS3Edit(element) {
+        console.log("AWS")
+        const file = {
+            uri: element,
+            name: 'comida.jpg',
+            type: "image/jpeg"
+        }
+        console.log(file);
+        console.log('Enviando imagem para S3');
+        try {
+            await RNS3.put(element, optionsProfileS3).progress((progress) => {
+                console.log('Uploading: ', progress.percent)
+                if (progress.percent) {
+                    console.log(progress.percent);
+                    setProgressUpload(progress.percent);
+                }
+            })
+                .then(response => {
+                    if (response.status !== 201) {
+                        console.log("Failed to upload image to S3");
+                    }
+                    console.log(response.body.postResponse.location);
+                    setEditDishImage(response.body.postResponse.location);
+                });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    async function encodeImageFileAsURL(element) {
+        uploadS3(element);
         setDishImage(element);
         console.log("BASE64");
         console.log(element);
@@ -352,9 +425,11 @@ export default function Menu({ history }) {
         fileReader.onload = function (fileLoadedEvent) {
             var srcData = fileLoadedEvent.target.result; // <--- data: base64
             setDishImage(srcData);
+            console.log("base64")
             console.log(srcData);
         }
         fileReader.readAsDataURL(fileToLoad);
+
     }
     function encodeEditImageFileAsURL(element) {
         setEditDishImage(element);
@@ -401,9 +476,10 @@ export default function Menu({ history }) {
                                 style={{ backgroundImage: `url(${preview})` }}
                                 className={styles.dishImage}
                             >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => encodeImageFileAsURL(event.target.files[0])} />
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3(event.target.files[0])} />
                                 <img src={camera} alt="Selecione uma Image" />
                             </label>
+                            <progress id="dishImage" max="100" value={progressUpload} />
                             <input placeholder="Dish Name" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
                             <input placeholder="Description" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
                             <input placeholder="Estimated Time of Arrival" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
@@ -427,7 +503,7 @@ export default function Menu({ history }) {
                                 style={{ backgroundImage: `url(${editPreview})` }}
                                 className={styles.editDishImage}
                             >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => encodeEditImageFileAsURL(event.target.files[0])} />
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3Edit(event.target.files[0])} />
                                 <img src={camera} alt="Selecione uma Image" />
                             </label>
                             <input placeholder="Dish Name" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />

@@ -19,8 +19,6 @@ export default function Reports({ history }) {
 
     const [editID, setEditID] = useState('');
     const [editName, setEditName] = useState('');
-    const [editEmail, setEditEmail] = useState('');
-    const [editPassword, setEditPassword] = useState('');
     const [editPhone, setEditPhone] = useState('');
 
     const [employees, setEmployees] = useState([]);
@@ -76,11 +74,65 @@ export default function Reports({ history }) {
         }
     }
 
-    function editEmployee(employee) {
+    //Função para editar um employee
+    async function editarFuncionário(event) {
+        console.log(editID);
+        console.log(editName);
+        console.log(editPhone);
+        event.preventDefault();
+        setIsLoading(true);
+        try {
+            console.log("teste");
+            const response = await apiUsers.put(`/employees/${editID}`,
+                {
+                    name: editName,
+                    phone: editPhone
+                }
+            );
+            console.log('deu certo');
+            togglePopupEditEmp();
+            setIsLoading(false);
+            console.log(response.data);
+            alert("Funcionário editado com sucesso");
+            window.location.reload(false);
+        } catch (err) {
+            setIsLoading(false);
+            togglePopupEditEmp();
+            alert(err);
+        }
+    }
+
+    //Função para remover um employee
+    async function deleteFuncionário() {
+        console.log(editID);
+        console.log(editName);
+        console.log(editPhone);
+        const id_token = sessionStorage.getItem('idR')
+        setIsLoading(true);
+        try {
+            console.log("teste");
+            const response = await apiUsers.delete(`/restaurants/${id_token}/employee/${editID}`,
+                {
+                    name: editName,
+                    phone: editPhone
+                }
+            );
+            console.log('deu certo');
+            togglePopupEditEmp();
+            setIsLoading(false);
+            console.log(response.data);
+            alert("Funcionário removido com sucesso");
+            window.location.reload(false);
+        } catch (err) {
+            setIsLoading(false);
+            togglePopupEditEmp();
+            alert(err);
+        }
+    }
+
+    function setEditEmployee(employee) {
         setEditID(employee.id);
-        setEditEmail(employee.email);
         setEditName(employee.name);
-        setEditPassword(employee.password);
         setEditPhone(employee.phone);
     }
     //Funções para abrir e fechar os PopUp
@@ -133,7 +185,7 @@ export default function Reports({ history }) {
                 isOpenNewEmp && <Popup
                     content={<>
                         <form onSubmit={newEmployee}>
-                            <b>Insert the new employee</b>
+                            <b>Insira o novo Funcionário</b>
                             <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
                             <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
                             <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
@@ -150,15 +202,15 @@ export default function Reports({ history }) {
             {
                 isOpenEditEmp && <Popup
                     content={<>
-                        <b>Edit employee</b>
-                        <input placeholder="Email" name="editEmail" id="editEmail" value={editEmail} onChange={event => setEditEmail(event.target.value)} />
-                        <input placeholder="Name" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
-                        <input placeholder="Password" name="editPassword" id="editPassword" type="password" value={editPassword} onChange={event => setEditPassword(event.target.value)} />
-                        <input placeholder="Phone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
-                        <div>
-                            <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Edit Employee</button>
-                            <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Cancel</button>
-                        </div>
+                        <form onSubmit={editarFuncionário}>
+                            <b>Editar Funcionário</b>
+                            <input placeholder="Name" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
+                            <input placeholder="Phone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
+                            <div>
+                                <button className={styles.insert} type="submit">Edit Employee</button>
+                                <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Cancel</button>
+                            </div>
+                        </form>
                     </>}
                     handleClose={togglePopupEditEmp}
                 />
@@ -166,9 +218,9 @@ export default function Reports({ history }) {
             {
                 isOpenRemoveEmp && <Popup
                     content={<>
-                        <b>You wish to Remove this employee?</b>
+                        <b>Você deseja remover o funcionário: <strong> {editName}</strong> ?</b>
                         <div>
-                            <button className={styles.insert} onClick={() => { togglePopupRemoveEmp() }}>Remove Employee</button>
+                            <button className={styles.insert} onClick={() => { deleteFuncionário() }}>Remove Employee</button>
                             <button className={styles.insert} onClick={() => { togglePopupRemoveEmp() }}>Cancel</button>
                         </div>
                     </>}
@@ -188,8 +240,8 @@ export default function Reports({ history }) {
                             <strong className={styles.comments}>{employesss.email}</strong>
                             <strong className={styles.dishName}>{employesss.password}</strong>
                             <strong className={styles.comments}>{employesss.phone}</strong>
-                            <button className={styles.ul} onClick={() => { togglePopupRemoveEmp() }}>Remove Employee</button>
-                            <button className={styles.li2} onClick={() => { editEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
+                            <button className={styles.ul} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remove Employee</button>
+                            <button className={styles.li2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
                         </ul>
                     </>
                 ))}

@@ -60,12 +60,11 @@ export default function Profile({ history }) {
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
-
         try {
             console.log("teste");
             const user_id = sessionStorage.getItem('idR');
-            const jason = {
-                body: {
+            const response = await apiUsers.put(`/restaurants/${user_id}`,
+                {
                     addressUpdate: {
                         city,
                         district,
@@ -76,34 +75,17 @@ export default function Profile({ history }) {
                     },
                     cnpj,
                     ownerName,
-                    phone
-                },
-            }
-            console.log(jason);
-            const response = await apiUsers.put(`/restaurants/${user_id}`,
-                {
-                    body: {
-                        addressUpdate: {
-                            city,
-                            district,
-                            number,
-                            postalCode,
-                            state,
-                            street
-                        },
-                        cnpj,
-                        ownerName,
-                        phone
-                    },
+                    phone,
+                    restaurantName
                 });
             console.log('deu certo');
             setIsLoading(false);
             console.log(response.data);
             alert("Seus dados foram atualizados com sucesso");
-            history.push('/');
+            history.push('/profile');
         } catch (err) {
             setIsLoading(false);
-            alert("Erro");
+            alert(err);
         }
     }
 

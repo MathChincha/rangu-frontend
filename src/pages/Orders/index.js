@@ -4,14 +4,12 @@ import Header from '../../components/Header'
 import Popup from '../../components/Popup/Popup'
 import Loading from '../../components/Loading/Popup'
 
-import { apiOrders } from '../../services/api'
+import { apiOrders, apiOrchestrate } from '../../services/api'
 
 export default function Orders({ history }) {
     const [isOpenEditStatus, setIsOpenEditStatus] = useState(false);
-    const [isOpenCheckout, setIsOpenCheckout] = useState(false);
     const [isOpenRemovePerson, setIsOpenRemovePerson] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
 
     const [orderArray, setOrderArray] = useState([]);
 
@@ -23,13 +21,21 @@ export default function Orders({ history }) {
             console.log(user_token);
             console.log("pegando os pedidos")
             try {
-                const response = await apiOrders.get('/restaurants', {
+                const response = await apiOrchestrate.get('/orders', {
                     headers: { restaurantId: id_token }
                 });
                 console.log(response.data);
                 response.data.sort();
                 setOrderArray(response.data);
-                console.log(orderArray);
+                response.data.map((order) => (
+                    console.log('order.id'),
+                    console.log(order.id),
+                    order.dishes.map((dish) => (
+                        console.log('dish.id'),
+                        console.log(dish.id)
+                    ))
+                ))
+                console.log(orderArray)
                 setIsLoading(false);
                 console.log("deu certo")
             } catch (err) {
@@ -39,15 +45,10 @@ export default function Orders({ history }) {
         }
         loadData();
         console.log('teste');
-        console.log(orderArray);
     }, []);
 
     function togglePopupEditStatus() {
         setIsOpenEditStatus(!isOpenEditStatus);
-    }
-
-    function togglePopupCheckout() {
-        setIsOpenCheckout(!isOpenCheckout);
     }
 
     function togglePopupRemovePerson() {
@@ -92,21 +93,6 @@ export default function Orders({ history }) {
                 isLoading && <Loading />
             }
             {
-                isOpenCheckout && <Popup
-                    content={<>
-                        <b>Checkout</b>
-                        <strong>Total Value:</strong>
-                        <strong>Itens to checkout:</strong>
-                        <strong>Payment per Person:</strong>
-                        <div>
-                            <button className={styles.insert} onClick={() => { togglePopupCheckout() }}>Checkout</button>
-                            <button className={styles.insert} onClick={() => { togglePopupCheckout() }}>Cancel</button>
-                        </div>
-                    </>}
-                    handleClose={togglePopupCheckout}
-                />
-            }
-            {
                 isOpenRemovePerson && <Popup
                     content={<>
                         <b>You want to remove this person?</b>
@@ -143,20 +129,15 @@ export default function Orders({ history }) {
             <div className={styles.menuContainer}>
                 {orderArray.map((order) => (
                     <>
-                        <h1 className={styles.title}>Número do pedido:{order.id}</h1>
-                        <ul className={styles.foodList} key={order.id}>
-                            <button className={styles.ul} onClick={() => { togglePopupCheckout() }}>Checkout</button>
+                        <li className={styles.foodList} key={order.id}>
+                            <strong className={styles.dishName}>{order.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</strong>
+                            <strong className={styles.price}>Preço: <strong className={styles.color}>{order.totalPrice}</strong></strong>
+                            <strong className={styles.eta}>Hora do Pedido: <strong className={styles.color}>{order.orderHour}</strong></strong>
+                            <strong className={styles.comments}>Comentários: <strong className={styles.color}>{order.comment}</strong></strong>
+                            <strong className={styles.clientName}>Nome do Cliente: <strong className={styles.color}>{order.clientName}</strong></strong>
+                            <strong className={styles.status}>Status: <strong className={styles.color}>{order.status}</strong></strong>
                             <button className={styles.ul} onClick={() => { togglePopupEditStatus() }}>Edit Status</button>
-                            <li className={styles.foodList} key={order.dishes.id}>
-                                <strong className={styles.dishName}>Pratos</strong>
-                                <strong className={styles.price}>Preço Total: <strong className={styles.color}>{order.totalPrice}</strong></strong>
-                                <strong className={styles.eta}>Hora do Pedido: <strong className={styles.color}>{order.orderHour}</strong></strong>
-                                <strong className={styles.comments}>Comentários: <strong className={styles.color}>{order.comment}</strong></strong>
-                                <strong className={styles.clientName}>Nome do Cliente: <strong className={styles.color}>{order.clientID}</strong></strong>
-                                <strong className={styles.status}>Status: <strong className={styles.color}>{order.status}</strong></strong>
-                            </li>
-
-                        </ul>
+                        </li>
                     </>
                 ))}
             </div>

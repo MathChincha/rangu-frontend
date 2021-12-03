@@ -38,3 +38,12 @@ const apiOrders = axios.create({
 export {
     apiOrders
 };
+
+const apiOrchestrate = axios.create({
+    baseURL: 'https://rangu-orchestrate.herokuapp.com/api/rangu/v1/'
+})
+
+export {
+    apiOrchestrate
+};
+
