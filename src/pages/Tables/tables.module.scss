@@ -14,7 +14,8 @@
 
 
 .tableContainer{
-    background-image: linear-gradient(180deg, rgba(215, 35, 60, 0.9), rgba(230, 95, 76, 0.9));
+  background-color:  #794D4A;
+  border: 1px solid black ;
     height: 100%;
     width: 40rem;
 
@@ -29,6 +30,10 @@
     align-items: center;
     justify-items: center;
 
+    button{
+      background-color: #DA3C30;
+    }
+
     div.Row {
         display: flex;
         flex-direction: row;
@@ -42,6 +47,7 @@
 
 div.QRCode{
     width: 256px;
+    height: 256px;
     background-color: white;
     margin: auto;
     margin-bottom: 1rem;

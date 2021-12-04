@@ -33,7 +33,9 @@ export default function Reports({ history }) {
                 const response = await apiUsers.get(`/restaurants/${user_id}`, {
                 });
                 console.log(response.data);
-                setEmployees(response.data.employees);
+                if (response.data.employees) {
+                    setEmployees(response.data.employees);
+                }
                 console.log(employees);
                 setIsLoading(false);
             } catch (err) {
