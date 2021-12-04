@@ -1,6 +1,12 @@
-import React, { useState } from 'react'
-import styles from './reports.module.scss'
-import Header from '../../components/Header'
+import { motion } from "framer-motion";
+import React from 'react';
+import ChartBar from "../../components/Charts/ChartBar";
+import ChartLine from "../../components/Charts/ChartLine";
+import ChartPie from "../../components/Charts/ChartPie";
+import Header from '../../components/Header';
+import styles from './reports.module.scss';
+
+
 
 export default function Reports({ history }) {
 
@@ -39,9 +45,20 @@ export default function Reports({ history }) {
     return (
         <>
             <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
-            <div className={styles}>
-
-            </div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <div className={styles.reportsContainer}>
+                    <div className={styles.graphics}>
+                        <ChartLine />
+                        <ChartBar />
+                    </div>
+                    <div className={styles.graphics}>
+                        <div className={styles.graphicsPie}>
+                            <ChartPie className={styles.ChartPie} />
+                        </div>
+                        <ChartBar />
+                    </div>
+                </div>
+            </motion.div>
         </>
     );
 }
