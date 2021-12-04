@@ -5,10 +5,22 @@ import Item from '../../components/Item/item'
 import Loading from '../../components/Loading/Popup'
 import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import { apiMenu } from '../../services/api'
+import { RNS3 } from 'react-native-aws3';
 
 import camera from '../../assets/camera.svg'
 
 export default function Menu({ history }) {
+
+    const optionsProfileS3 = {
+        keyPrefix: "menuFoodImg/",
+        bucket: "rangu-ohio",
+        region: "us-east-2",
+        accessKey: "AKIAXYPJWAUP26AIKWE6",
+        secretKey: "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",
+        successActionStatus: 201
+    };
+
+    const [progressUpload, setProgressUpload] = useState(10);
 
     //Variavéis dos PopUPS
     const [isOpenNewCategory, setIsOpenNewCategory] = useState(false);
@@ -230,7 +242,7 @@ export default function Menu({ history }) {
                     category: category,
                     description: description,
                     estimatedTime: eta,
-                    image: base64,
+                    image: dishImage,
                     name: dishName,
                     price: price
                 },
@@ -339,7 +351,71 @@ export default function Menu({ history }) {
         history.push('/reports');
     }
 
-    function encodeImageFileAsURL(element) {
+    async function uploadS3(element) {
+
+
+        console.log("AWS")
+
+        // var newFile = new File([element], 'Comida.png', { type: element.type });
+        const file = {
+            uri: element,
+            name: 'comida.jpg',
+            type: "image/jpeg"
+        }
+        console.log(file);
+        console.log('Enviando imagem para S3');
+        try {
+            await RNS3.put(element, optionsProfileS3).progress((progress) => {
+                console.log('Uploading: ', progress.percent)
+                if (progress.percent) {
+                    console.log(progress.percent);
+                    setProgressUpload(progress.percent);
+                }
+            })
+                .then(response => {
+                    if (response.status !== 201) {
+                        console.log("Failed to upload image to S3");
+                    }
+                    console.log(response.body.postResponse.location);
+                    setDishImage(response.body.postResponse.location);
+                });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async function uploadS3Edit(element) {
+        console.log("AWS")
+        const file = {
+            uri: element,
+            name: 'comida.jpg',
+            type: "image/jpeg"
+        }
+        console.log(file);
+        console.log('Enviando imagem para S3');
+        try {
+            await RNS3.put(element, optionsProfileS3).progress((progress) => {
+                console.log('Uploading: ', progress.percent)
+                if (progress.percent) {
+                    console.log(progress.percent);
+                    setProgressUpload(progress.percent);
+                }
+            })
+                .then(response => {
+                    if (response.status !== 201) {
+                        console.log("Failed to upload image to S3");
+                    }
+                    console.log(response.body.postResponse.location);
+                    setEditDishImage(response.body.postResponse.location);
+                });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    async function encodeImageFileAsURL(element) {
+        uploadS3(element);
         setDishImage(element);
         console.log("BASE64");
         console.log(element);
@@ -352,9 +428,11 @@ export default function Menu({ history }) {
         fileReader.onload = function (fileLoadedEvent) {
             var srcData = fileLoadedEvent.target.result; // <--- data: base64
             setDishImage(srcData);
+            console.log("base64")
             console.log(srcData);
         }
         fileReader.readAsDataURL(fileToLoad);
+
     }
     function encodeEditImageFileAsURL(element) {
         setEditDishImage(element);
@@ -381,7 +459,7 @@ export default function Menu({ history }) {
                     content={<>
                         <b>Insira a nova categoria </b>
                         <form onSubmit={createCategory}>
-                            <input placeholder="Category" name="category" id="category" value={category} onChange={event => setCategory(event.target.value)} ></input>
+                            <input placeholder="Categoria" name="category" id="category" value={category} onChange={event => setCategory(event.target.value)} ></input>
                             <div>
                                 <button type="submit" className={styles.insert}>Inserir Nova Categoria</button>
                                 <button className={styles.insert} onClick={() => { togglePopupNewCategory() }}>Cancelar</button>
@@ -401,13 +479,14 @@ export default function Menu({ history }) {
                                 style={{ backgroundImage: `url(${preview})` }}
                                 className={styles.dishImage}
                             >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => encodeImageFileAsURL(event.target.files[0])} />
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3(event.target.files[0])} />
                                 <img src={camera} alt="Selecione uma Image" />
                             </label>
-                            <input placeholder="Dish Name" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
-                            <input placeholder="Description" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
-                            <input placeholder="Estimated Time of Arrival" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
-                            <input placeholder="Price" name="price" id="price" value={price} onChange={event => setPrice(event.target.value)} />
+                            <progress id="dishImage" max="100" value={progressUpload} />
+                            <input placeholder="Nome do Prato" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
+                            <input placeholder="Descrição" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
+                            <input placeholder="Tempo Estimado" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
+                            <input placeholder="Preço" name="price" id="price" value={price} onChange={event => setPrice(event.target.value)} />
                             <div>
                                 <button type="submit" className={styles.insert}>Inserir Novo Item</button>
                                 <button className={styles.insert} onClick={() => { togglePopupNewItem() }}>Cancelar</button>
@@ -427,14 +506,14 @@ export default function Menu({ history }) {
                                 style={{ backgroundImage: `url(${editPreview})` }}
                                 className={styles.editDishImage}
                             >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => encodeEditImageFileAsURL(event.target.files[0])} />
+                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3Edit(event.target.files[0])} />
                                 <img src={camera} alt="Selecione uma Image" />
                             </label>
-                            <input placeholder="Dish Name" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
-                            <input placeholder="Description" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
-                            <input placeholder="Estimated Time of Arrival" name="editEta" id="editEta" value={editEta} onChange={event => setEditEta(event.target.value)} />
-                            <input placeholder="Price" name="editPrice" id="editPrice" value={editPrice} onChange={event => setEditPrice(event.target.value)} />
-                            <input placeholder="Category" name="editFoodCategory" id="editFoodCategory" value={editFoodCategory} onChange={event => setEditFoodCategory(event.target.value)} />
+                            <input placeholder="Nome do Prato" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
+                            <input placeholder="Descrição" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
+                            <input placeholder="Tempo Estimado" name="editEta" id="editEta" value={editEta} onChange={event => setEditEta(event.target.value)} />
+                            <input placeholder="Preço" name="editPrice" id="editPrice" value={editPrice} onChange={event => setEditPrice(event.target.value)} />
+                            <input placeholder="Categoria" name="editFoodCategory" id="editFoodCategory" value={editFoodCategory} onChange={event => setEditFoodCategory(event.target.value)} />
                             <div>
                                 <button type="submit" className={styles.insert}>Editar o Item</button>
                                 <button className={styles.insert} onClick={() => { togglePopupEditItem() }}>Cancelar</button>
@@ -481,17 +560,23 @@ export default function Menu({ history }) {
                             <ul className={styles.foodList} key={index}>
                                 <button className={styles.ul} onClick={() => { setDeleteCategory(category); togglePopupDisableCategory() }}>Desabilitar Categoria</button>
                                 <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
-                                {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
-                                    <li className={styles.foodList} key={index}>
-                                        <img className={styles.dishImg} src={food.image} alt="Food" />
-                                        <strong className={styles.dishName}>{food.name}</strong>
-                                        <strong className={styles.description}>Descrição: {food.description}</strong>
-                                        <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
-                                        <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
-                                        <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
-                                        <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
-                                    </li>
-                                ))}
+                                <div className={styles.overflowX}>
+                                    {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
+                                        <li className={styles.foodList} key={index}>
+                                            <img className={styles.dishImg} src={food.image} alt="Food" />
+                                            <strong className={styles.dishName}>{food.name}</strong>
+                                            <div className={styles.containerDescriçoes}>
+                                                <strong className={styles.description}>Descrição: {food.description}</strong>
+                                                <div className={styles.rowPriceEta}>
+                                                    <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
+                                                    <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
+                                                </div>
+                                            </div>
+                                            <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
+                                            <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
+                                        </li>
+                                    ))}
+                                </div>
                             </ul>
                         </>
                     ))}

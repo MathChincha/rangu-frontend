@@ -2,7 +2,8 @@
     div.collumn{
         display: flex;
         flex-direction: column;
-        background-color:  #FF2D00;
+        background-color:  #794D4A;
+        border: 1px solid black ;
         height: 100%;
         width: 60rem;
         
@@ -30,6 +31,7 @@
     }
 
     p {
+        color: white;
         font: 500 2rem Arial;
         margin-bottom: 1rem;
         margin-right: 12rem;
@@ -52,6 +54,9 @@
             margin-right: 1rem;
         }
 
+        button {
+            background-color: #DA3C30;
+        }
     }
 
     label {
