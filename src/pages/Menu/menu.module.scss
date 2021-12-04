@@ -41,15 +41,43 @@
     }
 
     li.foodList{
+        margin-right: 1rem;
         justify-content: center;
         display: grid;
+       
         grid-template-columns: 18rem 18rem;
         gap: 1rem;
-        background: #BF7245;
+        background: #794D4A;
+        border: 1px dotted black ;
         border-radius: 1rem;
     }
+    div.overflowX{
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        grid-column: 1 / 3;
+        grid-row: 2;
+    }
 
+    div.containerDescriçoes{
+        background-color: #DA3C30;
+        margin:auto;
+        display: flex;
+        width: 34rem;
+        flex-direction: column;
+        grid-column: 1 / 3;
+        grid-row: 3;
+        border-radius: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    
+    }
+    div.rowPriceEta{
+        display: flex;
+        flex-direction: row;
+    }
     h1.title{
+        color: white;
         margin-left: 2rem;
         margin-bottom: 1rem;
     }
@@ -61,6 +89,7 @@
     }
 
     strong.dishName{
+        color: white;
 
         font-size: 3rem;
 
@@ -86,7 +115,7 @@
     }
 
     strong.description{
-
+        color: white;
         font-size: 1.5rem;
         text-align: justify;
 
@@ -99,7 +128,7 @@
 
     strong.price{
         font-size: 1.5rem;
-
+        color: white;
         margin-right: auto;
         margin-left: auto;
     }
@@ -110,7 +139,7 @@
 
     strong.eta{
         font-size: 1.5rem;
-
+        color: white;
         margin-right: auto;
         margin-left: auto;
     }
@@ -119,6 +148,7 @@
         margin-right: auto;
         margin-left: auto;
         margin-bottom: 1rem;
+        background-color: #DA3C30;
 
         grid-column-start: 1;
         grid-column-end: 2;
@@ -130,6 +160,7 @@
         margin-right: auto;
         margin-left: auto;
         margin-bottom: 1rem;
+        background-color: #DA3C30;
 
         grid-column-start: 2;
         grid-column-end: 3;

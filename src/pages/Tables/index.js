@@ -219,14 +219,15 @@ export default function Reports({ history }) {
             <div className={styles.tableContainer}>
                 <div className={styles.Row}>
                     <button className={styles.newTables} onClick={() => { togglePopupNewTables() }}>Criar Mesas</button>
+                    <button className={styles.newTables} >Imprimir QRCodes</button>
                     <button className={styles.newTables} onClick={() => { togglePopupNewTable() }}>Criar Uma Mesa</button>
                 </div>
                 <div>
                     {mesasArray.map((table) => (
                         <>
-                            <h1 className={styles.title} key={table.number}>Mesa: {table.number}</h1>
+                            <h1 id='section-to-print' className={styles.title} key={table.number}>Mesa: {table.number}</h1>
                             <div className={styles.QRCode}>
-                                <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={`{tableId: '${table.id}'}`} />
+                                <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={`{"tableId": "${table.id}"}`} />
                             </div>
                             <div className={styles.Row}>
                                 <button className={styles.deleteTable} onClick={() => { setDeleteTable(table); togglePopupDeleteTable() }}>Remover Mesa</button>

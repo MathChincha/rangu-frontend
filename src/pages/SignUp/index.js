@@ -29,7 +29,7 @@ export default function SignUp({ history }) {
 
 
         try {
-            console.log("teste");
+            console.log("teste de cadastro");
             await apiUsers.post('/restaurants/sign-up',
                 {
                     restaurantName,
@@ -89,7 +89,7 @@ export default function SignUp({ history }) {
                         </div>
                         <div className={styles.row}>
                             <input placeholder="Senha" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                            <input placeholder="Distrito" name="district" id="district" value={district} onChange={event => setDistrict(event.target.value)} />
+                            <input placeholder="Bairro" name="district" id="district" value={district} onChange={event => setDistrict(event.target.value)} />
                         </div>
                         <div className={styles.row}>
                             <input placeholder="Telefone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />

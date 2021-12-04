@@ -1,11 +1,10 @@
 .menuContainer{
     background-color:  #FF2D00;
     height: 100%;
-    width: 80rem;
+    width: 40rem;
 
     padding-top: 1rem;
     padding-bottom: 1rem;
-    margin-top: 5rem;
     margin-bottom: 5rem;
     margin-left: auto;
     margin-right: auto;
@@ -20,16 +19,6 @@
         margin-right: 35rem;
     }
 
-    ul.foodList{
-        justify-content: center;
-
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        display: grid;
-        grid-template-columns: 38rem 38rem;
-        gap: 1rem;        
-    }
-
     li.foodList{
         justify-content: center;
         display: grid;
@@ -37,6 +26,9 @@
         gap: 1rem;
         background: #BF7245;
         border-radius: 1rem;
+        margin-bottom: 1rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
         padding-top: 1rem;
         padding-bottom: 1rem;
     }
