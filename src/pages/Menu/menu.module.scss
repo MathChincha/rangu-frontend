@@ -41,14 +41,22 @@
     }
 
     li.foodList{
+        margin-right: 1rem;
         justify-content: center;
         display: grid;
        
         grid-template-columns: 18rem 18rem;
         gap: 1rem;
         background: #794D4A;
-        border: 1px solid black ;
+        border: 1px dotted black ;
         border-radius: 1rem;
+    }
+    div.overflowX{
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        grid-column: 1 / 3;
+        grid-row: 2;
     }
 
     div.containerDescriçoes{

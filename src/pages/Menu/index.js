@@ -356,16 +356,16 @@ export default function Menu({ history }) {
 
         console.log("AWS")
 
-        var newFile = new File([element], 'Comida.png', { type: element.type });
+        // var newFile = new File([element], 'Comida.png', { type: element.type });
         const file = {
-            uri: newFile,
+            uri: element,
             name: 'comida.jpg',
             type: "image/jpeg"
         }
         console.log(file);
         console.log('Enviando imagem para S3');
         try {
-            await RNS3.put(newFile, optionsProfileS3).progress((progress) => {
+            await RNS3.put(element, optionsProfileS3).progress((progress) => {
                 console.log('Uploading: ', progress.percent)
                 if (progress.percent) {
                     console.log(progress.percent);
@@ -560,21 +560,23 @@ export default function Menu({ history }) {
                             <ul className={styles.foodList} key={index}>
                                 <button className={styles.ul} onClick={() => { setDeleteCategory(category); togglePopupDisableCategory() }}>Desabilitar Categoria</button>
                                 <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
-                                {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
-                                    <li className={styles.foodList} key={index}>
-                                        <img className={styles.dishImg} src={food.image} alt="Food" />
-                                        <strong className={styles.dishName}>{food.name}</strong>
-                                        <div className={styles.containerDescriçoes}>
-                                            <strong className={styles.description}>Descrição: {food.description}</strong>
-                                            <div className={styles.rowPriceEta}>
-                                                <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
-                                                <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
+                                <div className={styles.overflowX}>
+                                    {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
+                                        <li className={styles.foodList} key={index}>
+                                            <img className={styles.dishImg} src={food.image} alt="Food" />
+                                            <strong className={styles.dishName}>{food.name}</strong>
+                                            <div className={styles.containerDescriçoes}>
+                                                <strong className={styles.description}>Descrição: {food.description}</strong>
+                                                <div className={styles.rowPriceEta}>
+                                                    <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
+                                                    <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
-                                        <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
-                                    </li>
-                                ))}
+                                            <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
+                                            <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
+                                        </li>
+                                    ))}
+                                </div>
                             </ul>
                         </>
                     ))}
