@@ -59,5 +59,11 @@
         background-color: #D4BF59;
         transition-duration: 0.5s;
     }
-
+    button:disabled {
+        background-image: url("../../assets/loadingButton.gif");
+        background-size: 2rem;
+        background-repeat: no-repeat;
+        background-position: center;
+        transition-duration: 0.5s;
+    }
 }

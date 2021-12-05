@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import styles from './menu.module.scss'
+import { motion } from "framer-motion"
+import React, { useEffect, useMemo, useState } from 'react'
+import { RNS3 } from 'react-native-aws3'
+import camera from '../../assets/camera.svg'
+import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import Header from '../../components/Header'
 import Item from '../../components/Item/item'
 import Loading from '../../components/Loading/Popup'
-import CategoryPopup from '../../components/CategoryPopUp/Popup'
 import { apiMenu } from '../../services/api'
-import { RNS3 } from 'react-native-aws3';
+import styles from './menu.module.scss'
 
-import camera from '../../assets/camera.svg'
 
 export default function Menu({ history }) {
 
@@ -90,10 +91,14 @@ export default function Menu({ history }) {
                 });
                 console.log(response.data);
                 setCategoryArray(response.data);
-                setIsLoading(false);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             } catch (err) {
                 alert("Alerta");
-                setIsLoading(false);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             }
         }
         loadCategory();
@@ -126,10 +131,14 @@ export default function Menu({ history }) {
                 });
                 setFoodArray(response.data);
                 console.log(foodArray);
-                setIsLoading(false);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             } catch (err) {
                 alert("Alerta");
-                setIsLoading(false);
+                setTimeout(function () {
+                    setIsLoading(false);
+                }, 2000);
             }
         }
         loadData();
@@ -453,135 +462,154 @@ export default function Menu({ history }) {
     }
 
     return (
-        <>
-            {
-                isOpenNewCategory && <CategoryPopup
-                    content={<>
-                        <b>Insira a nova categoria </b>
-                        <form onSubmit={createCategory}>
-                            <input placeholder="Categoria" name="category" id="category" value={category} onChange={event => setCategory(event.target.value)} ></input>
-                            <div>
-                                <button type="submit" className={styles.insert}>Inserir Nova Categoria</button>
-                                <button className={styles.insert} onClick={() => { togglePopupNewCategory() }}>Cancelar</button>
-                            </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupNewCategory}
-                />
-            }
-            {
-                isOpenNewItem && <Item
-                    content={<>
-                        <b>Insira o novo item</b>
-                        <form onSubmit={createFood}>
-                            <label
-                                id="dishImage"
-                                style={{ backgroundImage: `url(${preview})` }}
-                                className={styles.dishImage}
-                            >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3(event.target.files[0])} />
-                                <img src={camera} alt="Selecione uma Image" />
-                            </label>
-                            <progress id="dishImage" max="100" value={progressUpload} />
-                            <input placeholder="Nome do Prato" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
-                            <input placeholder="Descrição" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
-                            <input placeholder="Tempo Estimado" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
-                            <input placeholder="Preço" name="price" id="price" value={price} onChange={event => setPrice(event.target.value)} />
-                            <div>
-                                <button type="submit" className={styles.insert}>Inserir Novo Item</button>
-                                <button className={styles.insert} onClick={() => { togglePopupNewItem() }}>Cancelar</button>
-                            </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupNewItem}
-                />
-            }
-            {
-                isOpenEditItem && <Item
-                    content={<>
-                        <b>Edite o Item</b>
-                        <form onSubmit={editFood}>
-                            <label
-                                id="editDishImage"
-                                style={{ backgroundImage: `url(${editPreview})` }}
-                                className={styles.editDishImage}
-                            >
-                                <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3Edit(event.target.files[0])} />
-                                <img src={camera} alt="Selecione uma Image" />
-                            </label>
-                            <input placeholder="Nome do Prato" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
-                            <input placeholder="Descrição" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
-                            <input placeholder="Tempo Estimado" name="editEta" id="editEta" value={editEta} onChange={event => setEditEta(event.target.value)} />
-                            <input placeholder="Preço" name="editPrice" id="editPrice" value={editPrice} onChange={event => setEditPrice(event.target.value)} />
-                            <input placeholder="Categoria" name="editFoodCategory" id="editFoodCategory" value={editFoodCategory} onChange={event => setEditFoodCategory(event.target.value)} />
-                            <div>
-                                <button type="submit" className={styles.insert}>Editar o Item</button>
-                                <button className={styles.insert} onClick={() => { togglePopupEditItem() }}>Cancelar</button>
-                            </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupEditItem}
-                />
-            }
-            {
-                isOpenDisableCategory && <CategoryPopup
-                    content={<>
-                        <b>Você deseja desabilitar a categoria <strong>{deleteCName}</strong>?</b>
-                        <div>
-                            <button className={styles.insert} onClick={() => { deleteCategory() }}>Desabilitar a Categoria</button>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Cancelar</button>
-                        </div>
-                    </>}
-                    handleClose={togglePopupDisableCategory}
-                />
-            }
-            {
-                isOpenDisableItem && <CategoryPopup
-                    content={<>
-                        <b>Você deseja desabilitar o item <strong>{deleteFName}</strong> da categoria <strong>{deleteCName}</strong>?</b>
-                        <div>
-                            <button className={styles.insert} onClick={() => { deleteDish() }}>Desabilitar o Item</button>
-                            <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Cancelar</button>
-                        </div>
-                    </>}
-                    handleClose={togglePopupDisableItem}
-                />
-            }
-            {
-                isLoading && <Loading />
-            }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
-            <div className={styles.menuContainer}>
-                <button className={styles.newCategory} onClick={() => { togglePopupNewCategory() }}>Criar Nova Categoria</button>
-                <div>
-                    {categoryArray.map((category, index) => (
-                        <>
-                            <h1 className={styles.title}>{category.name}</h1>
-                            <ul className={styles.foodList} key={index}>
-                                <button className={styles.ul} onClick={() => { setDeleteCategory(category); togglePopupDisableCategory() }}>Desabilitar Categoria</button>
-                                <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
-                                <div className={styles.overflowX}>
-                                    {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
-                                        <li className={styles.foodList} key={index}>
-                                            <img className={styles.dishImg} src={food.image} alt="Food" />
-                                            <strong className={styles.dishName}>{food.name}</strong>
-                                            <div className={styles.containerDescriçoes}>
-                                                <strong className={styles.description}>Descrição: {food.description}</strong>
-                                                <div className={styles.rowPriceEta}>
-                                                    <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
-                                                    <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
-                                                </div>
-                                            </div>
-                                            <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
-                                            <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
-                                        </li>
-                                    ))}
+        isLoading ? <Loading /> :
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                {
+                    isOpenNewCategory &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <CategoryPopup
+                            content={
+                                <>
+                                    <b>Insira a nova categoria </b>
+                                    <form onSubmit={createCategory}>
+                                        <input placeholder="Categoria" name="category" id="category" value={category} onChange={event => setCategory(event.target.value)} ></input>
+                                        <div>
+                                            <button type="submit" className={styles.insert}>Inserir Nova Categoria</button>
+                                            <button className={styles.insert} onClick={() => { togglePopupNewCategory() }}>Cancelar</button>
+                                        </div>
+                                    </form>
+                                </>}
+                            handleClose={togglePopupNewCategory}
+                        />
+                    </motion.div>
+                }
+                {
+                    isOpenNewItem &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Item
+                            content={<>
+                                <b>Insira o novo item</b>
+                                <form onSubmit={createFood}>
+                                    <label
+                                        id="dishImage"
+                                        style={{ backgroundImage: `url(${preview})` }}
+                                        className={styles.dishImage}
+                                    >
+                                        <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3(event.target.files[0])} />
+                                        <img src={camera} alt="Selecione uma Image" />
+                                    </label>
+                                    <progress id="dishImage" max="100" value={progressUpload} />
+                                    <input placeholder="Nome do Prato" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
+                                    <input placeholder="Descrição" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
+                                    <input placeholder="Tempo Estimado" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />
+                                    <input placeholder="Preço" name="price" id="price" value={price} onChange={event => setPrice(event.target.value)} />
+                                    <div>
+                                        <button type="submit" className={styles.insert}>Inserir Novo Item</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupNewItem() }}>Cancelar</button>
+                                    </div>
+                                </form>
+                            </>}
+                            handleClose={togglePopupNewItem}
+                        />
+                    </motion.div>
+
+                }
+                {
+                    isOpenEditItem &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Item
+                            content={<>
+                                <b>Edite o Item</b>
+                                <form onSubmit={editFood}>
+                                    <label
+                                        id="editDishImage"
+                                        style={{ backgroundImage: `url(${editPreview})` }}
+                                        className={styles.editDishImage}
+                                    >
+                                        <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3Edit(event.target.files[0])} />
+                                        <img src={camera} alt="Selecione uma Image" />
+                                    </label>
+                                    <input placeholder="Nome do Prato" name="editDishName" id="editDishName" value={editDishName} onChange={event => setEditDishName(event.target.value)} />
+                                    <input placeholder="Descrição" name="editDescription" id="editDescription" value={editDescription} onChange={event => setEditDescription(event.target.value)} />
+                                    <input placeholder="Tempo Estimado" name="editEta" id="editEta" value={editEta} onChange={event => setEditEta(event.target.value)} />
+                                    <input placeholder="Preço" name="editPrice" id="editPrice" value={editPrice} onChange={event => setEditPrice(event.target.value)} />
+                                    <input placeholder="Categoria" name="editFoodCategory" id="editFoodCategory" value={editFoodCategory} onChange={event => setEditFoodCategory(event.target.value)} />
+                                    <div>
+                                        <button type="submit" className={styles.insert}>Editar o Item</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupEditItem() }}>Cancelar</button>
+                                    </div>
+                                </form>
+                            </>}
+                            handleClose={togglePopupEditItem}
+                        />
+                    </motion.div>
+
+                }
+                {
+                    isOpenDisableCategory &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <CategoryPopup
+                            content={<>
+                                <b>Você deseja desabilitar a categoria <strong>{deleteCName}</strong>?</b>
+                                <div>
+                                    <button className={styles.insert} onClick={() => { deleteCategory() }}>Desabilitar a Categoria</button>
+                                    <button className={styles.insert} onClick={() => { togglePopupDisableCategory() }}>Cancelar</button>
                                 </div>
-                            </ul>
-                        </>
-                    ))}
+                            </>}
+                            handleClose={togglePopupDisableCategory}
+                        />
+                    </motion.div>
+
+                }
+                {
+                    isOpenDisableItem &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <CategoryPopup
+                            content={<>
+                                <b>Você deseja desabilitar o item <strong>{deleteFName}</strong> da categoria <strong>{deleteCName}</strong>?</b>
+                                <div>
+                                    <button className={styles.insert} onClick={() => { deleteDish() }}>Desabilitar o Item</button>
+                                    <button className={styles.insert} onClick={() => { togglePopupDisableItem() }}>Cancelar</button>
+                                </div>
+                            </>}
+                            handleClose={togglePopupDisableItem}
+                        />
+                    </motion.div>
+
+                }
+                <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
+                <div className={styles.menuContainer}>
+                    <button className={styles.newCategory} onClick={() => { togglePopupNewCategory() }}>Criar Nova Categoria</button>
+                    <div>
+                        {categoryArray.map((category, index) => (
+                            <>
+                                <h1 className={styles.title}>{category.name}</h1>
+                                <ul className={styles.foodList} key={index}>
+                                    <button className={styles.ul} onClick={() => { setDeleteCategory(category); togglePopupDisableCategory() }}>Desabilitar Categoria</button>
+                                    <button className={styles.ul} onClick={() => { setCategory(category.name); togglePopupNewItem() }}>Adicionar Item</button>
+                                    <div className={styles.overflowX}>
+                                        {foodArray.filter(foodArray => foodArray.category === category.name).map((food, index) => (
+                                            <li className={styles.foodList} key={index}>
+                                                <img className={styles.dishImg} src={food.image} alt="Food" />
+                                                <strong className={styles.dishName}>{food.name}</strong>
+                                                <div className={styles.containerDescriçoes}>
+                                                    <strong className={styles.description}>Descrição: {food.description}</strong>
+                                                    <div className={styles.rowPriceEta}>
+                                                        <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
+                                                        <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
+                                                    </div>
+                                                </div>
+                                                <button className={styles.li1} onClick={() => { setDeleteFood(food, category.name); togglePopupDisableItem() }}>Desabilitar Item</button>
+                                                <button className={styles.li2} onClick={() => { setEditFood(food); togglePopupEditItem() }}>Editar Item</button>
+                                            </li>
+                                        ))}
+                                    </div>
+                                </ul>
+                            </>
+                        ))}
+                    </div>
+
                 </div>
-            </div>
-        </>
+            </motion.div>
     );
 }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import styles from './profile.module.scss'
-import Header from '../../components/Header'
-import { apiUsers } from '../../services/api'
-import Loading from '../../components/Loading/Popup'
-
+import React, { useEffect, useState } from 'react'
 import logo from '../../assets/logo.png'
+import Header from '../../components/Header'
+import Loading from '../../components/Loading/Popup'
+import { apiUsers } from '../../services/api'
+import styles from './profile.module.scss'
+import { motion } from "framer-motion"
 
 export default function Profile({ history }) {
 
@@ -112,47 +112,46 @@ export default function Profile({ history }) {
     }
 
     return (
-        <>
-            {
-                isLoading && <Loading />
-            }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
-            <div className={styles.menuContainer}>
-                <div className={styles.collumn}>
-                    <img src={logo} alt="Logo" />
-                    <div className={styles.row}>
-                        <p>Identity</p>
-                        <p>Address</p>
+        isLoading ? <Loading /> :
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
+                <div className={styles.menuContainer}>
+                    <div className={styles.collumn}>
+                        <img src={logo} alt="Logo" />
+                        <div className={styles.row}>
+                            <p>Identity</p>
+                            <p>Address</p>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className={styles.row}>
+                                <input placeholder="CNPJ" name="CNPJ" id="CNPJ" value={cnpj} onChange={event => setCnpj(event.target.value)} />
+                                <input placeholder="PostalCode" name="postalCode" id="postalCode" value={postalCode} onChange={event => setPostalCode(event.target.value)} />
+                            </div>
+                            <div className={styles.row}>
+                                <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
+                                <input placeholder="State" name="state" id="state" value={state} onChange={event => setState(event.target.value)} />
+                            </div>
+                            <div className={styles.row}>
+                                <input placeholder="Name" name="name" id="name" value={ownerName} onChange={event => setOwnerName(event.target.value)} />
+                                <input placeholder="City" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
+                            </div>
+                            <div className={styles.row}>
+                                <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
+                                <input placeholder="District" name="district" id="district" value={district} onChange={event => setDistrict(event.target.value)} />
+                            </div>
+                            <div className={styles.row}>
+                                <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
+                                <input placeholder="Street" name="street" id="street" value={street} onChange={event => setStreet(event.target.value)} />
+                            </div>
+                            <div className={styles.row}>
+                                <input placeholder="RestaurantName" name="restaurantName" id="restaurantName" value={restaurantName} onChange={event => setRestaurantName(event.target.value)} />
+                                <input placeholder="Number" name="number" id="number" value={number} onChange={event => setNumber(event.target.value)} />
+                            </div>
+                            <button type="submit">Update</button>
+                        </form>
                     </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className={styles.row}>
-                            <input placeholder="CNPJ" name="CNPJ" id="CNPJ" value={cnpj} onChange={event => setCnpj(event.target.value)} />
-                            <input placeholder="PostalCode" name="postalCode" id="postalCode" value={postalCode} onChange={event => setPostalCode(event.target.value)} />
-                        </div>
-                        <div className={styles.row}>
-                            <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                            <input placeholder="State" name="state" id="state" value={state} onChange={event => setState(event.target.value)} />
-                        </div>
-                        <div className={styles.row}>
-                            <input placeholder="Name" name="name" id="name" value={ownerName} onChange={event => setOwnerName(event.target.value)} />
-                            <input placeholder="City" name="city" id="city" value={city} onChange={event => setCity(event.target.value)} />
-                        </div>
-                        <div className={styles.row}>
-                            <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                            <input placeholder="District" name="district" id="district" value={district} onChange={event => setDistrict(event.target.value)} />
-                        </div>
-                        <div className={styles.row}>
-                            <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
-                            <input placeholder="Street" name="street" id="street" value={street} onChange={event => setStreet(event.target.value)} />
-                        </div>
-                        <div className={styles.row}>
-                            <input placeholder="RestaurantName" name="restaurantName" id="restaurantName" value={restaurantName} onChange={event => setRestaurantName(event.target.value)} />
-                            <input placeholder="Number" name="number" id="number" value={number} onChange={event => setNumber(event.target.value)} />
-                        </div>
-                        <button type="submit">Update</button>
-                    </form>
                 </div>
-            </div>
-        </>
+            </motion.div>
+
     );
 }

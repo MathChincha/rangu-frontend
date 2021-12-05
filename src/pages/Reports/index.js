@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
-import styles from './reports.module.scss'
-import Header from '../../components/Header'
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from 'react';
+import ChartBar from "../../components/Charts/ChartBar";
+import ChartLine from "../../components/Charts/ChartLine";
+import ChartPie from "../../components/Charts/ChartPie";
+import Header from '../../components/Header';
+import Loading from '../../components/Loading/Popup';
+import styles from './reports.module.scss';
+
+
 
 export default function Reports({ history }) {
 
-    async function handleSubmit(event) {
-        event.preventDefault();
+    const [isLoading, setIsLoading] = useState(false);
 
-        try {
-            history.push('/signup')
-        } catch (err) {
-            alert("Alerta");
-        }
-    }
+
+    useEffect(() => {
+        setIsLoading(true);
+        setTimeout(function () {
+            setIsLoading(false);
+        }, 2000);
+    }, []);
 
     function logoff() {
         history.push('/');
@@ -37,11 +44,22 @@ export default function Reports({ history }) {
     }
 
     return (
-        <>
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
-            <div className={styles}>
+        isLoading ? <Loading /> :
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
+                <div className={styles.reportsContainer}>
+                    <div className={styles.graphics}>
+                        <ChartLine />
+                        <ChartBar />
+                    </div>
+                    <div className={styles.graphics}>
+                        <div className={styles.graphicsPie}>
+                            <ChartPie className={styles.ChartPie} />
+                        </div>
+                        <ChartBar />
+                    </div>
+                </div>
+            </motion.div>
 
-            </div>
-        </>
     );
 }
