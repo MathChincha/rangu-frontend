@@ -1,23 +1,8 @@
-@media print {
-    body * {
-      visibility: hidden;
-    }
-    #section-to-print, #section-to-print * {
-      visibility: visible;
-    }
-    #section-to-print {
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-  }
-
-
 .tableContainer{
   background-color:  #794D4A;
   border: 1px solid black ;
     height: 100%;
-    width: 40rem;
+    width: 80rem;
 
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -29,6 +14,41 @@
 
     align-items: center;
     justify-items: center;
+
+    @media print{
+       *{
+        visibility: hidden;
+      }
+      .printcontainer, .printcontainer *{
+          visibility: visible;
+      }
+
+      .printcontainer{
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .deleteTable{
+        visibility: hidden;
+      }
+
+      .print{
+        visibility: visible;
+      }
+  }
+
+    ul{
+      margin-top: 1rem;
+      margin-left: 1.5rem;
+      display: grid;
+        grid-template-columns: 38rem 38rem;
+        gap: 1rem;
+
+        div.print{
+          display: none;
+        }
+    }
 
     button{
       background-color: #DA3C30;

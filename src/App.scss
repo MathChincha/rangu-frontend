@@ -46,6 +46,29 @@
 
 }
 
+@media print{
+    *{
+       visibility: hidden;
+   }
+   .printcontainer, .printcontainer *{
+       visibility: visible;
+   }
+
+   .printcontainer{
+     position: absolute;
+     left: 0;
+     top: 0;
+   }
+
+   .deleteTable{
+    visibility: hidden;
+  }
+
+  .print{
+    visibility: visible;
+  }
+}
+
 @media(max-width: 1080px){
     html{
         font-size: 93.75%;// 15px

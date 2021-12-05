@@ -238,12 +238,11 @@ export default function Reports({ history }) {
                 {employees.map((employesss) => (
                     <>
                         <ul className={styles.foodList} key={employesss.id}>
-                            <strong className={styles.dishName}>{employesss.name}</strong>
-                            <strong className={styles.comments}>{employesss.email}</strong>
-                            <strong className={styles.dishName}>{employesss.password}</strong>
-                            <strong className={styles.comments}>{employesss.phone}</strong>
-                            <button className={styles.ul} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remove Employee</button>
-                            <button className={styles.li2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
+                            <strong className={styles.name}>{employesss.name}</strong>
+                            <strong className={styles.email}>{employesss.email}</strong>
+                            <strong className={styles.phone}>{employesss.phone}</strong>
+                            <button className={styles.button1} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remove Employee</button>
+                            <button className={styles.button2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
                         </ul>
                     </>
                 ))}

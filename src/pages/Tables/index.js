@@ -219,22 +219,25 @@ export default function Reports({ history }) {
             <div className={styles.tableContainer}>
                 <div className={styles.Row}>
                     <button className={styles.newTables} onClick={() => { togglePopupNewTables() }}>Criar Mesas</button>
-                    <button className={styles.newTables} >Imprimir QRCodes</button>
+                    <button className={styles.newTables} onClick={() => { window.print() }}>Imprimir QRCodes</button>
                     <button className={styles.newTables} onClick={() => { togglePopupNewTable() }}>Criar Uma Mesa</button>
                 </div>
-                <div>
+                <ul className={styles.printcontainer} id="print-container">
                     {mesasArray.map((table) => (
-                        <>
-                            <h1 id='section-to-print' className={styles.title} key={table.number}>Mesa: {table.number}</h1>
+                        <div>
+                            <div className={styles.print}>
+                                <p>Para acessar o cárdapio e realizar os pedidos baixe o aplicativo e leia o QRCode abaixo</p>
+                            </div>
+                            <h1 className={styles.title} key={table.number}>Mesa: {table.number}</h1>
                             <div className={styles.QRCode}>
                                 <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={`{"tableId": "${table.id}"}`} />
                             </div>
                             <div className={styles.Row}>
                                 <button className={styles.deleteTable} onClick={() => { setDeleteTable(table); togglePopupDeleteTable() }}>Remover Mesa</button>
                             </div>
-                        </>
+                        </div>
                     ))}
-                </div>
+                </ul>
             </div>
         </>
     );
