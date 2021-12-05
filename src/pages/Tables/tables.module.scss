@@ -12,12 +12,11 @@
     }
   }
 
-
 .tableContainer{
   background-color:  #794D4A;
   border: 1px solid black ;
     height: 100%;
-    width: 40rem;
+    width: 80rem;
 
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -29,6 +28,18 @@
 
     align-items: center;
     justify-items: center;
+
+    div.print{
+      display: none;
+    }
+
+    ul{
+      margin-top: 1rem;
+      margin-left: 1.5rem;
+      display: grid;
+        grid-template-columns: 38rem 38rem;
+        gap: 1rem;
+    }
 
     button{
       background-color: #DA3C30;

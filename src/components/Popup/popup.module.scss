@@ -12,13 +12,14 @@
     flex-direction: column;
     position: relative;
     width: 35rem;
-    background-color:  #FF2D00;
+    background-color:  #DA3C30;
     border-radius: 1rem;
     padding: 20px;
     margin-right: auto;
     margin-left: auto;
     margin-top: 2rem;
     overflow: auto;
+    text-align: center;
   }
 
   button{
@@ -39,6 +40,8 @@
   }
   
   b{
+    color: white;
+    font-weight: normal;
     font-size: 1.5rem;
   }
 
