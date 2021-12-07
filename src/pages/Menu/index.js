@@ -12,6 +12,8 @@ import styles from './menu.module.scss'
 
 export default function Menu({ history }) {
 
+    const id_rest = sessionStorage.getItem('idR')
+
     const optionsProfileS3 = {
         keyPrefix: "menuFoodImg/",
         bucket: "rangu-ohio",
@@ -362,16 +364,11 @@ export default function Menu({ history }) {
 
     async function uploadS3(element) {
 
-
         console.log("AWS")
 
-        // var newFile = new File([element], 'Comida.png', { type: element.type });
-        const file = {
-            uri: element,
-            name: 'comida.jpg',
-            type: "image/jpeg"
-        }
-        console.log(file);
+        //var newFile = new File([element], `${id_rest}-0.jpg`, { type: element.type });
+
+        console.log(element);
         console.log('Enviando imagem para S3');
         try {
             await RNS3.put(element, optionsProfileS3).progress((progress) => {
@@ -395,13 +392,20 @@ export default function Menu({ history }) {
     }
 
     async function uploadS3Edit(element) {
-        console.log("AWS")
-        const file = {
-            uri: element,
-            name: 'comida.jpg',
-            type: "image/jpeg"
+
+        let numberImg
+        if (editDishImage) {
+            let currentName = editDishImage;
+            numberImg = currentName.replace('https://rangu-ohio.s3.amazonaws.com/menuFoodImg%2F' + id_rest, "").replace(".jpg", "").replace("-", "");
+            numberImg++;
         }
-        console.log(file);
+        else {
+            numberImg = 0;
+        }
+
+        var newFile = new File([element], `${id_rest}-${numberImg}.jpg`, { type: element.type });
+
+        console.log("AWS")
         console.log('Enviando imagem para S3');
         try {
             await RNS3.put(element, optionsProfileS3).progress((progress) => {
