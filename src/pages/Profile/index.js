@@ -119,8 +119,8 @@ export default function Profile({ history }) {
                     <div className={styles.collumn}>
                         <img src={logo} alt="Logo" />
                         <div className={styles.row}>
-                            <p>Identity</p>
-                            <p>Address</p>
+                            <p>Identidade</p>
+                            <p>Endereço</p>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className={styles.row}>
