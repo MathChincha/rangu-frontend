@@ -10,13 +10,13 @@ export default function ForgotPassword({ history }) {
     return (
         <div className={styles.forgotPasswordContainer}>
             <img src={logo} alt="Logo" />
-            <p>Forgot Password?</p>
+            <p>Esqueceu a Senha?</p>
             <form>
-                <input placeholder="username" name="username" id="username" />
-                <input placeholder="email" name="email" id="email" />
-                <button>Send New Password</button>
+                <input placeholder="CNPJ" name="username" id="username" />
+                <input placeholder="Email" name="email" id="email" />
+                <button>Enviar Nova Senha</button>
             </form>
-            <label onClick={Login}>Back</label>
+            <label className={styles.cursor} onClick={Login}>Voltar</label>
         </div>
     );
 }

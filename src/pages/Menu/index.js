@@ -72,6 +72,7 @@ export default function Menu({ history }) {
         async function loadCategory() {
             setIsLoading(true);
             const user_token = sessionStorage.getItem('token');
+
             const id_token = sessionStorage.getItem('idR')
             console.log(user_token);
             try {

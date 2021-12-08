@@ -89,10 +89,10 @@ export default function Profile({ history }) {
         }
     }
 
-    async function getCep(event) {
+    async function getCep() {
 
         try {
-            const response = await apiCep.get(`${event}.json`)
+            const response = await apiCep.get(`${postalCode}.json`)
             console.log(response.data);
             setPostalCode(response.data.code);
             setState(response.data.state);
@@ -101,8 +101,8 @@ export default function Profile({ history }) {
             setStreet(response.data.address);
 
         } catch (err) {
+            alert("Cep não encontrado")
         }
-
     }
 
     function logoff() {
@@ -141,7 +141,7 @@ export default function Profile({ history }) {
                         <form onSubmit={handleSubmit}>
                             <div className={styles.row}>
                                 <input placeholder="CNPJ" name="CNPJ" id="CNPJ" value={cnpj} onChange={event => setCnpj(event.target.value)} />
-                                <input placeholder="PostalCode" name="postalCode" id="postalCode" value={postalCode} onChange={event => getCep(event.target.value)} />
+                                <input placeholder="PostalCode" name="postalCode" id="postalCode" value={postalCode} onFocusOut={t => getCep()} onPointerLeave={t => getCep()} onChange={event => setPostalCode(event.target.value)} />
                             </div>
                             <div className={styles.row}>
                                 <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
@@ -163,7 +163,7 @@ export default function Profile({ history }) {
                                 <input placeholder="RestaurantName" name="restaurantName" id="restaurantName" value={restaurantName} onChange={event => setRestaurantName(event.target.value)} />
                                 <input placeholder="Number" name="number" id="number" value={number} onChange={event => setNumber(event.target.value)} />
                             </div>
-                            <button type="submit">Update</button>
+                            <button type="submit">Atualizar</button>
                         </form>
                     </div>
                 </div>

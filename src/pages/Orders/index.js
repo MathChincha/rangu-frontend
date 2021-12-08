@@ -49,15 +49,13 @@ export default function Orders({ history }) {
         setIsLoading(true);
         getAllData();
         setIsLoading(false);
-
-        var interval = setInterval(function () {
-            getAllData();
-        }, 5 * 1000);
-
+        /*teste 
+                var interval = setInterval(function () {
+                    getAllData();
+                }, 5 * 1000);
+                */
         console.log('teste');
     }, []);
-
-
 
     //Função Pulling dos Pedidos
     async function getAllData() {
@@ -83,7 +81,7 @@ export default function Orders({ history }) {
             console.log(orderArray)
             console.log("deu certo")
         } catch (err) {
-            alert(err);
+            console.log(err);
         }
     }
 
@@ -216,15 +214,14 @@ export default function Orders({ history }) {
                                             <>
                                                 <li className={styles.foodList} key={order.id}>
                                                     <strong className={styles.dishName}>{order.dishes.map((dish, index) => { if (index == 0) { return dish.name } })}</strong>
-                                                    <strong className={styles.price}>Preço: <strong className={styles.color}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(order.totalPrice)}</strong></strong>
                                                     <strong className={styles.eta}>Hora do Pedido: <strong className={styles.color}>{new Date(order.orderHour).toLocaleDateString()} - {new Date(order.orderHour).toLocaleTimeString()}</strong></strong>
+                                                    <strong className={styles.price}>Preço: {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(order.totalPrice)}</strong>
                                                     <strong className={styles.comments}>Comentários: <strong className={styles.color}>{order.comment}</strong></strong>
                                                     <strong className={styles.clientName}>Nome do Cliente: <strong className={styles.color}>{order.clientName}</strong></strong>
                                                     <strong className={styles.status}>Mesa: <strong className={styles.color}>{order.tableNumber}</strong></strong>
                                                     <button className={styles.ul} onClick={() => { setEditOrder(order); togglePopupEditStatus() }}>Edit Status</button>
                                                 </li>
                                             </>
-
                                         ))}
                                 </div>
                             </ul>
