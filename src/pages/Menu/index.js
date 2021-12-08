@@ -599,7 +599,7 @@ export default function Menu({ history }) {
                                                 <div className={styles.containerDescriçoes}>
                                                     <strong className={styles.description}>Descrição: {food.description}</strong>
                                                     <div className={styles.rowPriceEta}>
-                                                        <strong className={styles.price}>Preço: <strong className={styles.color}>{food.price}</strong></strong>
+                                                        <strong className={styles.price}>Preço: <strong className={styles.color}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(food.price)}</strong></strong>
                                                         <strong className={styles.eta}>Tempo de Preparo: <strong className={styles.color}>{food.estimatedTime}</strong></strong>
                                                     </div>
                                                 </div>

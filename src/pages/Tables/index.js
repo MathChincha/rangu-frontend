@@ -1,3 +1,4 @@
+import { motion } from "framer-motion"
 import React, { useState, useEffect } from 'react'
 import styles from './tables.module.scss'
 import Header from '../../components/Header'
@@ -169,76 +170,83 @@ export default function Reports({ history }) {
     }
 
     return (
-        <>
-            {
-                isOpenNewTables && <Popup
-                    content={<>
-                        <b>Insira a quantidade de Mesas que deseja criar:</b>
-                        <form onSubmit={createMesas}>
-                            <input type="number" placeholder="Número de Mesas" name="numbers" id="numbers" onChange={event => setNumbers(event.target.value)} ></input>
+        isLoading ? <Loading /> :
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                {
+                    isOpenNewTables &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Popup
+                            content={<>
+                                <b>Insira a quantidade de Mesas que deseja criar:</b>
+                                <form onSubmit={createMesas}>
+                                    <input type="number" placeholder="Número de Mesas" name="numbers" id="numbers" onChange={event => setNumbers(event.target.value)} ></input>
+                                    <div>
+                                        <button type="submit" className={styles.insert}>Criar novas Mesas</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupNewTables() }}>Cancelar</button>
+                                    </div>
+                                </form>
+                            </>}
+                            handleClose={togglePopupNewTables}
+                        />
+                    </motion.div>
+                }
+                {
+                    isOpenNewTable &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Popup
+                            content={<>
+                                <b>Insira o número da Mesa que deseja criar:</b>
+                                <form onSubmit={createMesa}>
+                                    <input type="number" placeholder="Número da Mesa" name="number" id="number" onChange={event => setNumber(event.target.value)}  ></input>
+                                    <div>
+                                        <button type="submit" className={styles.insert}>Criar Nova Mesa</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupNewTable() }}>Cancelar</button>
+                                    </div>
+                                </form>
+                            </>}
+                            handleClose={togglePopupNewTable}
+                        />
+                    </motion.div>
+                }
+                {
+                    isOpenDeleteTable &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Popup
+                            content={<>
+                                <b>Você deseja realmente remover a mesa:  <strong>{deleteNumber}?</strong></b>
+                                <div>
+                                    <button type="submit" className={styles.insert} onClick={() => { deleteMesa() }}>Remover Mesa</button>
+                                    <button className={styles.insert} onClick={() => { togglePopupDeleteTable() }}>Cancelar</button>
+                                </div>
+                            </>}
+                            handleClose={togglePopupNewTable}
+                        />
+                    </motion.div>
+                }
+                <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
+                <div className={styles.tableContainer}>
+                    <div className={styles.Row}>
+                        <button className={styles.newTables} onClick={() => { togglePopupNewTables() }}>Criar Mesas</button>
+                        <button className={styles.newTables} onClick={() => { window.print() }}>Imprimir QRCodes</button>
+                        <button className={styles.newTables} onClick={() => { togglePopupNewTable() }}>Criar Uma Mesa</button>
+                    </div>
+                    <ul className={styles.printcontainer} id="print-container">
+                        {mesasArray.map((table) => (
                             <div>
-                                <button type="submit" className={styles.insert}>Criar novas Mesas</button>
-                                <button className={styles.insert} onClick={() => { togglePopupNewTables() }}>Cancelar</button>
+                                <div className={styles.print}>
+                                    <p>Para acessar o cárdapio e realizar os pedidos baixe o aplicativo e leia o QRCode abaixo</p>
+                                </div>
+                                <h1 className={styles.title} key={table.number}>Mesa: {table.number}</h1>
+                                <div className={styles.QRCode}>
+                                    <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={`{"tableId": "${table.id}"}`} />
+                                </div>
+                                <div className={styles.Row}>
+                                    <button className={styles.deleteTable} onClick={() => { setDeleteTable(table); togglePopupDeleteTable() }}>Remover Mesa</button>
+                                </div>
                             </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupNewTables}
-                />
-            }
-            {
-                isOpenNewTable && <Popup
-                    content={<>
-                        <b>Insira o número da Mesa que deseja criar:</b>
-                        <form onSubmit={createMesa}>
-                            <input type="number" placeholder="Número da Mesa" name="number" id="number" onChange={event => setNumber(event.target.value)}  ></input>
-                            <div>
-                                <button type="submit" className={styles.insert}>Criar Nova Mesa</button>
-                                <button className={styles.insert} onClick={() => { togglePopupNewTable() }}>Cancelar</button>
-                            </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupNewTable}
-                />
-            }
-            {
-                isOpenDeleteTable && <Popup
-                    content={<>
-                        <b>Você deseja realmente remover a mesa:  <strong>{deleteNumber}?</strong></b>
-                        <div>
-                            <button type="submit" className={styles.insert} onClick={() => { deleteMesa() }}>Remover Mesa</button>
-                            <button className={styles.insert} onClick={() => { togglePopupDeleteTable() }}>Cancelar</button>
-                        </div>
-                    </>}
-                    handleClose={togglePopupNewTable}
-                />
-            }
-            {
-                isLoading && <Loading />
-            }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
-            <div className={styles.tableContainer}>
-                <div className={styles.Row}>
-                    <button className={styles.newTables} onClick={() => { togglePopupNewTables() }}>Criar Mesas</button>
-                    <button className={styles.newTables} onClick={() => { window.print() }}>Imprimir QRCodes</button>
-                    <button className={styles.newTables} onClick={() => { togglePopupNewTable() }}>Criar Uma Mesa</button>
+                        ))}
+                    </ul>
                 </div>
-                <ul className={styles.printcontainer} id="print-container">
-                    {mesasArray.map((table) => (
-                        <div>
-                            <div className={styles.print}>
-                                <p>Para acessar o cárdapio e realizar os pedidos baixe o aplicativo e leia o QRCode abaixo</p>
-                            </div>
-                            <h1 className={styles.title} key={table.number}>Mesa: {table.number}</h1>
-                            <div className={styles.QRCode}>
-                                <QRCode className={styles.QRCode} name="QrCode" id="QrCode" value={`{"tableId": "${table.id}"}`} />
-                            </div>
-                            <div className={styles.Row}>
-                                <button className={styles.deleteTable} onClick={() => { setDeleteTable(table); togglePopupDeleteTable() }}>Remover Mesa</button>
-                            </div>
-                        </div>
-                    ))}
-                </ul>
-            </div>
-        </>
+            </motion.div>
     );
 }
