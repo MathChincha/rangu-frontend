@@ -47,3 +47,10 @@ export {
     apiOrchestrate
 };
 
+const apiCep = axios.create({
+    baseURL: 'https://ws.apicep.com/cep/'
+})
+
+export {
+    apiCep
+};

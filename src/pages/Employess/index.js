@@ -1,3 +1,4 @@
+import { motion } from "framer-motion"
 import React, { useState, useEffect } from 'react'
 import styles from './employess.module.scss'
 import Header from '../../components/Header'
@@ -181,72 +182,78 @@ export default function Reports({ history }) {
     }
 
     return (
-        <>
-
-            {
-                isOpenNewEmp && <Popup
-                    content={<>
-                        <form onSubmit={newEmployee}>
-                            <b>Insira o novo Funcionário</b>
-                            <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                            <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
-                            <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                            <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
-                            <div>
-                                <button type="submit" className={styles.insert} >Insert New Employee</button>
-                                <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Cancel</button>
-                            </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupNewEmp}
-                />
-            }
-            {
-                isOpenEditEmp && <Popup
-                    content={<>
-                        <form onSubmit={editarFuncionário}>
-                            <b>Editar Funcionário</b>
-                            <input placeholder="Name" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
-                            <input placeholder="Phone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
-                            <div>
-                                <button className={styles.insert} type="submit">Edit Employee</button>
-                                <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Cancel</button>
-                            </div>
-                        </form>
-                    </>}
-                    handleClose={togglePopupEditEmp}
-                />
-            }
-            {
-                isOpenRemoveEmp && <Popup
-                    content={<>
-                        <b>Você deseja remover o funcionário: <strong> {editName}</strong> ?</b>
-                        <div>
-                            <button className={styles.insert} onClick={() => { deleteFuncionário() }}>Remove Employee</button>
-                            <button className={styles.insert} onClick={() => { togglePopupRemoveEmp() }}>Cancel</button>
-                        </div>
-                    </>}
-                    handleClose={togglePopupRemoveEmp}
-                />
-            }
-            {
-                isLoading && <Loading />
-            }
-            <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
-            <div className={styles.tableContainer}>
-                <button className={styles.newEmployee} onClick={() => { togglePopupNewEmp() }}>Create New Employee</button>
-                {employees.map((employesss) => (
-                    <>
-                        <ul className={styles.foodList} key={employesss.id}>
-                            <strong className={styles.name}>{employesss.name}</strong>
-                            <strong className={styles.email}>{employesss.email}</strong>
-                            <strong className={styles.phone}>{employesss.phone}</strong>
-                            <button className={styles.button1} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remove Employee</button>
-                            <button className={styles.button2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
-                        </ul>
-                    </>
-                ))}
-            </div>
-        </>
+        isLoading ? <Loading /> :
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                {
+                    isOpenNewEmp &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Popup
+                            content={<>
+                                <form onSubmit={newEmployee}>
+                                    <b>Insira o novo Funcionário</b>
+                                    <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
+                                    <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
+                                    <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
+                                    <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
+                                    <div>
+                                        <button type="submit" className={styles.insert} >Insert New Employee</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Cancel</button>
+                                    </div>
+                                </form>
+                            </>}
+                            handleClose={togglePopupNewEmp}
+                        />
+                    </motion.div>
+                }
+                {
+                    isOpenEditEmp &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Popup
+                            content={<>
+                                <form onSubmit={editarFuncionário}>
+                                    <b>Editar Funcionário</b>
+                                    <input placeholder="Name" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
+                                    <input placeholder="Phone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
+                                    <div>
+                                        <button className={styles.insert} type="submit">Edit Employee</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Cancel</button>
+                                    </div>
+                                </form>
+                            </>}
+                            handleClose={togglePopupEditEmp}
+                        />
+                    </motion.div>
+                }
+                {
+                    isOpenRemoveEmp &&
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: "tween", ease: "anticipate", duration: 1 }}>
+                        <Popup
+                            content={<>
+                                <b>Você deseja remover o funcionário: <strong> {editName}</strong> ?</b>
+                                <div>
+                                    <button className={styles.insert} onClick={() => { deleteFuncionário() }}>Remove Employee</button>
+                                    <button className={styles.insert} onClick={() => { togglePopupRemoveEmp() }}>Cancel</button>
+                                </div>
+                            </>}
+                            handleClose={togglePopupRemoveEmp}
+                        />
+                    </motion.div>
+                }
+                <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
+                <div className={styles.tableContainer}>
+                    <button className={styles.newEmployee} onClick={() => { togglePopupNewEmp() }}>Create New Employee</button>
+                    {employees.map((employesss) => (
+                        <>
+                            <ul className={styles.foodList} key={employesss.id}>
+                                <strong className={styles.name}>{employesss.name}</strong>
+                                <strong className={styles.email}>{employesss.email}</strong>
+                                <strong className={styles.phone}>{employesss.phone}</strong>
+                                <button className={styles.button1} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remove Employee</button>
+                                <button className={styles.button2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
+                            </ul>
+                        </>
+                    ))}
+                </div>
+            </motion.div>
     );
 }

@@ -1,13 +1,12 @@
 import { motion } from "framer-motion"
 import React, { useState } from 'react'
 import logo from '../../assets/logo.png'
-import { apiLogin } from '../../services/api'
+import { apiLogin, apiUsers } from '../../services/api'
 import styles from './login.module.scss'
 
 export default function Login({ history }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const type = 'RESTAURANT';
     const [isLoading, setIsLoading] = useState(false);
 
     async function handleSubmit(event) {
@@ -15,24 +14,33 @@ export default function Login({ history }) {
         setIsLoading(true);
         console.log(email);
         console.log(password);
-        console.log(type);
 
         try {
             const response = await apiLogin.post('/login',
                 {
                     email,
                     password,
-                    type
+
                 });
-            console.log(response);
+            console.log(response.data);
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('idR', response.data.userId);
+            sessionStorage.setItem('type', response.data.userType);
+            sessionStorage.setItem('empId', response.data.userId);
             console.log(sessionStorage.getItem('token'));
             console.log(sessionStorage.getItem('idR'));
+            console.log(sessionStorage.getItem('type'));
+
+            if (response.data.userType === 'EMPLOYEE') {
+                const empResponse = await apiUsers.get(`/employees/${response.data.userId}`)
+                sessionStorage.setItem('idR', empResponse.data.restaurantId);
+                console.log("restaurantID");
+                console.log(sessionStorage.getItem('idR'));
+            }
             setIsLoading(false);
             history.push('/menu');
         } catch (err) {
-            alert("Alerta");
+            alert(err);
             setIsLoading(false);
         }
     }
