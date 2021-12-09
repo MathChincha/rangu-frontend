@@ -503,7 +503,6 @@ export default function Menu({ history }) {
                                         <input style={{ display: 'none' }} type="file" accept=".jpeg, .png, .jpg" onChange={event => uploadS3(event.target.files[0])} />
                                         <img src={camera} alt="Selecione uma Image" />
                                     </label>
-                                    <progress id="dishImage" max="100" value={progressUpload} />
                                     <input placeholder="Nome do Prato" name="dishName" id="dishName" value={dishName} onChange={event => setDishName(event.target.value)} />
                                     <input placeholder="Descrição" name="description" id="description" value={description} onChange={event => setDescription(event.target.value)} />
                                     <input placeholder="Tempo Estimado" name="eta" id="eta" value={eta} onChange={event => setEta(event.target.value)} />

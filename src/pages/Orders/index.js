@@ -194,8 +194,8 @@ export default function Orders({ history }) {
                                     <option value="DONE">Finalizado</option>
                                 </select >
                                 <div>
-                                    <button className={styles.insert} onClick={() => { editarStatus() }}>Edit Status</button>
-                                    <button className={styles.insert} onClick={() => { togglePopupEditStatus() }}>Cancel</button>
+                                    <button className={styles.insert} onClick={() => { editarStatus() }}>Editar Status</button>
+                                    <button className={styles.insert} onClick={() => { togglePopupEditStatus() }}>Cancelar</button>
                                 </div>
                             </>}
                             handleClose={togglePopupEditStatus}
@@ -219,7 +219,7 @@ export default function Orders({ history }) {
                                                     <strong className={styles.comments}>Comentários: <strong className={styles.color}>{order.comment}</strong></strong>
                                                     <strong className={styles.clientName}>Nome do Cliente: <strong className={styles.color}>{order.clientName}</strong></strong>
                                                     <strong className={styles.status}>Mesa: <strong className={styles.color}>{order.tableNumber}</strong></strong>
-                                                    <button className={styles.ul} onClick={() => { setEditOrder(order); togglePopupEditStatus() }}>Edit Status</button>
+                                                    <button className={styles.ul} onClick={() => { setEditOrder(order); togglePopupEditStatus() }}>Editar Status</button>
                                                 </li>
                                             </>
                                         ))}
