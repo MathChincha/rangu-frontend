@@ -3,19 +3,29 @@ import React, { useEffect, useState } from 'react';
 import ChartBar from "../../components/Charts/ChartBar";
 import ChartLine from "../../components/Charts/ChartLine";
 import ChartPie from "../../components/Charts/ChartPie";
+import NumberOrdersChart from "../../components/Charts/NumberOrdersChart";
 import Header from '../../components/Header';
 import Loading from '../../components/Loading/Popup';
 import styles from './reports.module.scss';
-
-
+import { apiOrchestrate } from '../../services/api'
 
 export default function Reports({ history }) {
 
     const [isLoading, setIsLoading] = useState(false);
+    const [analyticsOrders, setAnalyticsOrders] = useState();
 
 
-    useEffect(() => {
+    useEffect( async () => {
         setIsLoading(true);
+        const restaurantId = sessionStorage.getItem('idR')
+        var starterDate = '2021-12-01';
+        var analyticsOrders = await apiOrchestrate.get('/analytics/orders', {
+            headers: {
+                restaurantId: restaurantId,
+                starterDate: starterDate
+            }
+        });
+        setAnalyticsOrders(analyticsOrders.data);
         setTimeout(function () {
             setIsLoading(false);
         }, 2000);
@@ -50,7 +60,7 @@ export default function Reports({ history }) {
                 <div className={styles.reportsContainer}>
                     <div className={styles.graphics}>
                         <ChartLine />
-                        <ChartBar />
+                        <NumberOrdersChart />
                     </div>
                     <div className={styles.graphics}>
                         <div className={styles.graphicsPie}>

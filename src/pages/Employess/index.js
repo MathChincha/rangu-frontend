@@ -241,15 +241,15 @@ export default function Reports({ history }) {
                 }
                 <Header menu={() => menu()} logoff={() => logoff()} orders={() => orders()} profile={() => profile()} employess={() => employess()} tables={() => tables()} reports={() => reports()} />
                 <div className={styles.tableContainer}>
-                    <button className={styles.newEmployee} onClick={() => { togglePopupNewEmp() }}>Create New Employee</button>
+                    <button className={styles.newEmployee} onClick={() => { togglePopupNewEmp() }}>Criar novo funcionario</button>
                     {employees.map((employesss) => (
                         <>
                             <ul className={styles.foodList} key={employesss.id}>
                                 <strong className={styles.name}>{employesss.name}</strong>
                                 <strong className={styles.email}>{employesss.email}</strong>
                                 <strong className={styles.phone}>{employesss.phone}</strong>
-                                <button className={styles.button1} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remove Employee</button>
-                                <button className={styles.button2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Edit Employee</button>
+                                <button className={styles.button1} onClick={() => { setEditEmployee(employesss); togglePopupRemoveEmp() }}>Remover funcionario</button>
+                                <button className={styles.button2} onClick={() => { setEditEmployee(employesss); togglePopupEditEmp() }}>Editar funcionario</button>
                             </ul>
                         </>
                     ))}
