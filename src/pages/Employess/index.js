@@ -192,12 +192,12 @@ export default function Reports({ history }) {
                                 <form onSubmit={newEmployee}>
                                     <b>Insira o novo Funcionário</b>
                                     <input placeholder="Email" name="email" id="email" value={email} onChange={event => setEmail(event.target.value)} />
-                                    <input placeholder="Name" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
-                                    <input placeholder="Password" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                                    <input placeholder="Phone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
+                                    <input placeholder="Nome" name="name" id="name" value={name} onChange={event => setName(event.target.value)} />
+                                    <input placeholder="Senha" name="password" id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
+                                    <input placeholder="Telefone" name="phone" id="phone" value={phone} onChange={event => setPhone(event.target.value)} />
                                     <div>
-                                        <button type="submit" className={styles.insert} >Insert New Employee</button>
-                                        <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Cancel</button>
+                                        <button type="submit" className={styles.insert} >Criar Novo Funcionário</button>
+                                        <button className={styles.insert} onClick={() => { togglePopupNewEmp() }}>Cancelar</button>
                                     </div>
                                 </form>
                             </>}
@@ -212,10 +212,10 @@ export default function Reports({ history }) {
                             content={<>
                                 <form onSubmit={editarFuncionário}>
                                     <b>Editar Funcionário</b>
-                                    <input placeholder="Name" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
-                                    <input placeholder="Phone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
+                                    <input placeholder="Nome" name="editName" id="editName" value={editName} onChange={event => setEditName(event.target.value)} />
+                                    <input placeholder="Telefone" name="editPhone" id="editPhone" value={editPhone} onChange={event => setEditPhone(event.target.value)} />
                                     <div>
-                                        <button className={styles.insert} type="submit">Edit Employee</button>
+                                        <button className={styles.insert} type="submit">Editar Funcionário</button>
                                         <button className={styles.insert} onClick={() => { togglePopupEditEmp() }}>Cancel</button>
                                     </div>
                                 </form>
