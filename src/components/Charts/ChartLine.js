@@ -1,12 +1,11 @@
 import {
-    BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title,
+    CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title,
     Tooltip
 } from 'chart.js';
-import faker from 'faker';
-import React from "react";
+import React from 'react';
 import { Line } from 'react-chartjs-2';
 
-function ChartLine() { //TODO passar labels e values apos pegar pela API
+export default function ChartLine(props) {
 
     ChartJS.register(
         CategoryScale,
@@ -33,13 +32,12 @@ function ChartLine() { //TODO passar labels e values apos pegar pela API
         },
     };
 
-    const labels = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const data = {
-        labels,
+        labels: props.analytics.labels,
         datasets: [
             {
                 label: 'Fluxo de pessoas',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+                data: props.analytics.values,
                 borderColor: 'rgba(0, 24, 255)',
                 backgroundColor: 'rgba(0, 24, 255)',
             },
@@ -51,5 +49,3 @@ function ChartLine() { //TODO passar labels e values apos pegar pela API
         <Line options={options} data={data} />
     );
 };
-
-export default ChartLine;

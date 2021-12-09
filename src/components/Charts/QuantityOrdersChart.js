@@ -2,12 +2,11 @@ import {
     BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title,
     Tooltip
 } from 'chart.js';
-import faker from 'faker';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
-function NumberOrdersChart() { //TODO passar labels e values apos pegar pela API
-
+export default function NumberOrdersChart(props) {
+    
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -32,13 +31,13 @@ function NumberOrdersChart() { //TODO passar labels e values apos pegar pela API
         },
     };
 
-    const labels = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado', 'Domingo'];
+    
     const data = {
-        labels,
+        labels: props.analytics.labels,
         datasets: [
             {
-                label: 'Pratos mais pedidos',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+                label: 'Quantidades de pratos Pedidos',
+                data: props.analytics.values,
                 borderColor: 'rgba(0, 24, 255)',
                 backgroundColor: 'rgba(0, 24, 255)',
             },
@@ -50,5 +49,3 @@ function NumberOrdersChart() { //TODO passar labels e values apos pegar pela API
         <Bar options={options} data={data} />
     );
 };
-
-export default NumberOrdersChart;

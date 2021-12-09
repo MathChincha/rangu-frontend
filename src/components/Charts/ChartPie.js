@@ -1,9 +1,8 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
-import React from "react";
+import React from 'react';
 import { Pie } from 'react-chartjs-2';
 
-function ChartPie() { //TODO passar labels e values apos pegar pela API
-
+export default function ChartPie(props) {
     ChartJS.register(ArcElement, Tooltip, Legend);
 
     ChartJS.defaults.color = "#fff"
@@ -22,16 +21,14 @@ function ChartPie() { //TODO passar labels e values apos pegar pela API
             title: {
                 display: true,
                 text: 'Pratos mais pedidos',
-              }
+            }
         },
     };
-
     const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: props.analytics.labels,
         datasets: [
             {
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                data: props.analytics.values,
                 backgroundColor: [
                     'rgba(255, 99, 132)',
                     'rgba(54, 162, 235)',
@@ -49,7 +46,7 @@ function ChartPie() { //TODO passar labels e values apos pegar pela API
                     'rgba(255, 159, 64, 1)',
                 ],
                 borderWidth: 1,
-            },
+            }
         ],
     };
 
@@ -58,5 +55,3 @@ function ChartPie() { //TODO passar labels e values apos pegar pela API
         <Pie options={options} data={data} />
     );
 };
-
-export default ChartPie;

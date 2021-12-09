@@ -6,7 +6,7 @@ import faker from 'faker';
 import React from "react";
 import { Bar } from 'react-chartjs-2';
 
-function ChartBar() { //TODO passar labels e values apos pegar pela API
+function ChartBar(props) { 
 
     ChartJS.register(
         CategoryScale,
@@ -32,13 +32,13 @@ function ChartBar() { //TODO passar labels e values apos pegar pela API
         },
     };
 
-    const labels = ['Arroz', 'Feijao', 'Salada', 'Macarrao'];
+    const labels = props.analytics.labels;
     const data = {
         labels,
         datasets: [
             {
-                label: 'Pratos mais pedidos',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+                label: 'Lucro',
+                data:  props.analytics.values,
                 borderColor: 'rgba(0, 24, 255)',
                 backgroundColor: 'rgba(0, 24, 255)',
             },

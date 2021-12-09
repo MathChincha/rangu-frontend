@@ -1,19 +1,43 @@
 .reportsContainer{
     display: flex;
+    
 
 }
 
 .graphics {
-    width: 35rem;
+    width: 33rem;
     height: 10%;
-    margin-left: 5rem;
+    margin-left: 7rem;
+    
 
     .graphicsPie {
         width: 20rem;
         height: 10%;
         margin: auto;
-        margin-top: -1rem;
+        margin-top: -2rem;
         margin-bottom: -1.5rem;
     }
+}
+
+.buttonAnalytics {
+    margin-left: 38rem;
+    color: #fff;
+    height: 2rem;
+    width: 6rem;
+    font-size: 0.8rem;
+    border-radius: 1rem;
+    background-color: #DBC65B;
+    border: 0;
+    margin-bottom: 1rem;
+    font-family: 'Shippori Antique B1', sans-serif;
+    transition: transform 0.5s ease;
+}
+.buttonAnalytics:hover {
+    animation-fill-mode: none;
+    cursor: pointer;
+    visibility: visible;
+    transform: scale(1.1);
+    background-color: #D4BF59;
+    transition-duration: 0.5s;
 }
 
